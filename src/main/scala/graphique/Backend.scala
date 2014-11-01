@@ -21,9 +21,8 @@ trait Backend {
    * dimensions.
    *
    * @param tag the requested image tag identifier
-   * @param width the requested image width
-   * @param height the requested image height
+   * @param dimensions the requested image dimensions
    * @return an image URL if it were available existed
    */
-  def imageUrl(tag: String, width: Int, height: Int): Option[String]
+  def imageUrl(tag: String, dimensions: Dimensions): Option[String]
 }

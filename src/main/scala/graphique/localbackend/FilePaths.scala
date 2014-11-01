@@ -2,6 +2,8 @@ package graphique.localbackend
 
 import java.nio.file.Path
 
+import graphique.Dimensions
+
 /**
  * The single authoritative point for where files should be stored.
  *
@@ -9,8 +11,18 @@ import java.nio.file.Path
  */
 private[localbackend] class FilePaths(storageLocation: Path) {
 
-  def ofRawImage(tag: String): Path = storageLocation resolve tag
+  /**
+   * All the full size images should end in this suffix
+   */
+  private val FullSizeSuffix = ".jpg"
 
-  def ofThumbnail(tag: String, width: Int, height: Int): Path =
-    (storageLocation resolve ("%dx%d" format(width, height))) resolve tag
+  def ofRawImage(tag: String): Path = (storageLocation resolve "raw") resolve tag
+
+  def ofFullSizeImage(tag: String): Path = {
+    val parent = storageLocation resolve "fullsize"
+    parent resolve (tag + FullSizeSuffix)
+  }
+
+  def ofThumbnailImage(tag: String, dimensions: Dimensions): Path =
+    ((storageLocation resolve "thumbnail") resolve dimensions.canonicalString) resolve tag
 }

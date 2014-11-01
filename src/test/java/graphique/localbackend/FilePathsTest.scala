@@ -12,13 +12,19 @@ class FilePathsTest extends FunSuite {
 
   test("raw image path") {
     new Context {
-      assert(filePaths.ofRawImage("image1") === Paths.get("/images/image1"))
+      assert(filePaths.ofRawImage("image1") === Paths.get("/images/raw/image1"))
     }
   }
 
-  test("thubnailed image path") {
+  test("thumbnailed image path") {
     new Context {
-      assert(filePaths.ofThumbnail("zimago", 42, 23) === Paths.get("/images/42x23/zimago"))
+      assert(filePaths.ofThumbnailImage("zimago", 42, 23) === Paths.get("/images/thumbnail/42x23/zimago"))
+    }
+  }
+
+  test("test full size image path") {
+    new Context {
+      assert(filePaths.ofFullSizeImage("shlurb") === Paths.get("/images/fullsize/shlurb.jpg"))
     }
   }
 }
