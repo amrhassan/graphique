@@ -2,6 +2,7 @@ package graphique.localbackend
 
 import java.nio.file.Paths
 
+import graphique.Dimensions
 import org.scalatest.FunSuite
 
 class FilePathsTest extends FunSuite {
@@ -18,7 +19,7 @@ class FilePathsTest extends FunSuite {
 
   test("thumbnailed image path") {
     new Context {
-      assert(filePaths.ofThumbnailImage("zimago", 42, 23) === Paths.get("/images/thumbnail/42x23/zimago"))
+      assert(filePaths.ofThumbnailImage("zimago", Dimensions(42, 23)) === Paths.get("/images/thumbnail/42x23/zimago"))
     }
   }
 

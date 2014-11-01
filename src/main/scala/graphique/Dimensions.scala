@@ -1,5 +1,5 @@
 package graphique
 
-case class Dimensions(width: Int, height: Int) extends Tuple2(width, height) {
+case class Dimensions(width: Int, height: Int) {
   lazy val canonicalString: String = "%dx%d" format(width, height)
 }
