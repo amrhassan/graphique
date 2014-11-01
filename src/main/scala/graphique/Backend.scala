@@ -1,7 +1,5 @@
 package graphique
 
-import java.awt.image.BufferedImage
-
 /**
  * An image storing/serving backend that handles all the necessary low-level work.
  */
@@ -13,11 +11,10 @@ trait Backend {
    * The submitted raw image may overwrite a previously submitted raw image if they share the same
    * tag.
    *
-   * @param image the submitted image
+   * @param rawImage the submitted image
    * @param tag the identifier of the submitted image
    */
-  def submit(image: BufferedImage, tag: String)
-
+  def submit(rawImage: Array[Byte], tag: String)
 
   /**
    * Looks up and returns an HTTP URL for the image identified by the given tag and in the specified
