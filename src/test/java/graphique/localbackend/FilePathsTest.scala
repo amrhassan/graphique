@@ -19,7 +19,8 @@ class FilePathsTest extends FunSuite {
 
   test("thumbnailed image path") {
     new Context {
-      assert(filePaths.ofThumbnailImage("zimago", Dimensions(42, 23)) === Paths.get("/images/thumbnail/42x23/zimago"))
+      assert(
+        filePaths.ofThumbnailImage("zimago", Dimensions(42, 23)) === Paths.get("/images/thumbnail/42x23/zimago.jpg"))
     }
   }
 

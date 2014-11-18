@@ -12,7 +12,7 @@ import graphique.Dimensions
 private[localbackend] class FilePaths(storageLocation: Path) {
 
   /**
-   * All the full size images should end in this suffix
+   * All the paths to processed images must end in this suffix.
    */
   private val FullSizeSuffix = ".jpg"
 
@@ -23,6 +23,8 @@ private[localbackend] class FilePaths(storageLocation: Path) {
     parent resolve (tag + FullSizeSuffix)
   }
 
-  def ofThumbnailImage(tag: String, dimensions: Dimensions): Path =
-    ((storageLocation resolve "thumbnail") resolve dimensions.canonicalString) resolve tag
+  def ofThumbnailImage(tag: String, dimensions: Dimensions): Path = {
+    val parent = storageLocation resolve "thumbnail"
+    (parent resolve dimensions.canonicalString) resolve (tag + FullSizeSuffix)
+  }
 }
