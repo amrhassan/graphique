@@ -54,5 +54,5 @@ private[image] object Attribute {
   /**
    * The image should be transcoded to the given format.
    */
-  case class TranscodedFormat(imageFormat: graphique.image.Format) extends Format
+  case class TranscodedFormat(imageFormat: ImageFormat) extends Format
 }

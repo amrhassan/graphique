@@ -28,7 +28,7 @@ case class Attributes private(size: Attribute.Size, format: Attribute.Format) {
   /**
    * Specifies that the image should be in the given format.
    */
-  def transcodedTo(format: Format): Attributes =
+  def transcodedTo(format: ImageFormat): Attributes =
     copy(format = Attribute.TranscodedFormat(format))
 }
 
