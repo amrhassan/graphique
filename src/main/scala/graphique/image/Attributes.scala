@@ -14,7 +14,7 @@ package graphique.image
  *  
  *  val pngVersion = attributes.transcodedTo(PNGFormat)
  */
-case class ImageAttributes private(size: Attribute.Size, format: Attribute.Format) {
+case class Attributes private(size: Attribute.Size, format: Attribute.Format) {
 
   /**
    * Specifies that the image should fit within the specified size.
@@ -22,21 +22,21 @@ case class ImageAttributes private(size: Attribute.Size, format: Attribute.Forma
    * This attribute usually results in a resize with respect to the aspect ratio
    * of the original image.
    */
-  def resizedTo(dimensions: Dimensions): ImageAttributes =
+  def resizedTo(dimensions: Dimensions): Attributes =
     copy(size = Attribute.SizeWithin(dimensions))
 
   /**
    * Specifies that the image should be in the given format.
    */
-  def transcodedTo(format: Format): ImageAttributes =
+  def transcodedTo(format: Format): Attributes =
     copy(format = Attribute.TranscodedFormat(format))
 }
 
-case object ImageAttributes {
+case object Attributes {
 
   /**
    * The attributes of the original image unchanged.
    */
   lazy val originalImage =
-    ImageAttributes(size = Attribute.OriginalSize, format = Attribute.OriginalFormat)
+    Attributes(size = Attribute.OriginalSize, format = Attribute.OriginalFormat)
 }

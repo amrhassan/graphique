@@ -1,7 +1,7 @@
 package graphique.localbackend
 
 import java.nio.file.Path
-import graphique.image.ImageAttributes
+import graphique.image.Attributes$
 import org.apache.commons.codec.digest.DigestUtils
 
 /**
@@ -31,7 +31,7 @@ private[localbackend] class FilePaths(storageLocation: Path) {
    * @param tag the identifier of the image
    * @param attributes the attributes of the requested image
    */
-  def ofImage(tag: String, attributes: ImageAttributes): Path =
+  def ofImage(tag: String, attributes: Attributes): Path =
     imagePath resolve (tag + "-" + hashImageAttributes(attributes))
 }
 
@@ -40,6 +40,6 @@ private[localbackend] object FilePaths {
   /**
    * Computes and returns the MD5 hexadecimal hash value of the input ImageAttributes.
    */
-  def hashImageAttributes(imageAttributes: ImageAttributes): String =
+  def hashImageAttributes(imageAttributes: Attributes): String =
     DigestUtils md5Hex imageAttributes.toString.toLowerCase
 }
