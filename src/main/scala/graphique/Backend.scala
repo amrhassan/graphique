@@ -1,5 +1,7 @@
 package graphique
 
+import graphique.image.ImageAttributes
+
 /**
  * An image storing/serving backend that handles all the necessary low-level work.
  */

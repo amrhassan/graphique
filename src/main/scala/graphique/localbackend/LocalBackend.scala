@@ -1,6 +1,7 @@
 package graphique.localbackend
 
-import graphique.{ImageAttributes, Backend}
+import graphique.Backend
+import graphique.image.ImageAttributes
 
 private[localbackend] trait LocalBackend extends Backend {
 

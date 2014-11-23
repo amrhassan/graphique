@@ -1,6 +1,6 @@
 package graphique.localbackend
 
-import graphique.ImageAttributes
+import graphique.image.ImageAttributes
 
 /**
  * The HTTP image server
