@@ -1,7 +1,5 @@
 package graphique
 
-import graphique.imaging.Dimensions
-
 /**
  * An image storing/serving backend that handles all the necessary low-level work.
  */
@@ -23,8 +21,8 @@ trait Backend {
    * dimensions.
    *
    * @param tag the requested image tag identifier
-   * @param dimensions the requested image dimensions
+   * @param attributes the set of desired attributes of the returned image
    * @return an image URL if it were available existed
    */
-  def imageUrl(tag: String, dimensions: Dimensions): Option[String]
+  def imageUrl(tag: String, attributes: ImageAttributes): Option[String]
 }

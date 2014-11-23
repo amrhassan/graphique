@@ -2,7 +2,8 @@ package graphique.localbackend
 
 import java.nio.file.Path
 
-import graphique.imaging.Dimensions
+import graphique.ImageAttributes
+import org.apache.commons.codec.digest.DigestUtils
 
 /**
  * The single authoritative point for where files should be stored.
@@ -11,20 +12,35 @@ import graphique.imaging.Dimensions
  */
 private[localbackend] class FilePaths(storageLocation: Path) {
 
+  private val rawImagePath = storageLocation resolve "raw"
+  private val imagePath = storageLocation resolve "image"
+
+  import FilePaths._
+
   /**
-   * All the paths to processed images must end in this suffix.
+   * The path to the raw image submitted initially.
+   *
+   * @param tag the identifier tag of the image
    */
-  private val FullSizeSuffix = ".jpg"
+  def ofRawImage(tag: String): Path = rawImagePath resolve tag
 
-  def ofRawImage(tag: String): Path = (storageLocation resolve "raw") resolve tag
+  /**
+   * The path to the image.
+   *
+   * This is where the raw image after processing should be cached to.
+   *
+   * @param tag the identifier of the image
+   * @param attributes the attributes of the requested image
+   */
+  def ofImage(tag: String, attributes: ImageAttributes): Path =
+    imagePath resolve (tag + "-" + hashImageAttributes(attributes))
+}
 
-  def ofFullSizeImage(tag: String): Path = {
-    val parent = storageLocation resolve "fullsize"
-    parent resolve (tag + FullSizeSuffix)
-  }
+private[localbackend] object FilePaths {
 
-  def ofThumbnailImage(tag: String, dimensions: Dimensions): Path = {
-    val parent = storageLocation resolve "thumbnail"
-    (parent resolve dimensions.canonicalString) resolve (tag + FullSizeSuffix)
-  }
+  /**
+   * Computes and returns the MD5 hexadecimal hash value of the input ImageAttributes.
+   */
+  def hashImageAttributes(imageAttributes: ImageAttributes): String =
+    DigestUtils md5Hex imageAttributes.toString.toLowerCase
 }
