@@ -1,6 +1,6 @@
 package graphique.localbackend
 
-import graphique.Dimensions
+import graphique.imaging.Dimensions
 
 /**
  * The HTTP image server

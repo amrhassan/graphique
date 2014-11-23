@@ -1,8 +1,7 @@
 package graphique.localbackend
 
 import java.nio.file.Paths
-
-import graphique.Dimensions
+import graphique.imaging.Dimensions
 import org.scalatest.FunSuite
 
 class FilePathsTest extends FunSuite {

@@ -2,7 +2,7 @@ package graphique.localbackend
 
 import java.nio.file.Path
 
-import graphique.Dimensions
+import graphique.imaging.Dimensions
 
 /**
  * The single authoritative point for where files should be stored.

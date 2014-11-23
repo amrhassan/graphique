@@ -1,4 +1,4 @@
-package graphique
+package graphique.imaging
 
 /**
  * Dimensions of an image.

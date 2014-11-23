@@ -1,20 +1,22 @@
 package graphique
 
+import graphique.imaging.Dimensions
+
 /**
  * An image storing/serving backend that handles all the necessary low-level work.
  */
 trait Backend {
 
   /**
-   * Submits a raw image to the backend.
+   * Submits an image to the backend.
    *
-   * The submitted raw image may overwrite a previously submitted raw image if they share the same
-   * tag.
+   * The submitted image may overwrite a previously submitted image if they share the same tag.
    *
-   * @param rawImage the submitted image
+   * @param image the submitted image
    * @param tag the identifier of the submitted image
+   * @throws ImageSubmissionError when the image submission fails
    */
-  def submit(rawImage: Array[Byte], tag: String)
+  def submit(image: Array[Byte], tag: String)
 
   /**
    * Looks up and returns an HTTP URL for the image identified by the given tag and in the specified

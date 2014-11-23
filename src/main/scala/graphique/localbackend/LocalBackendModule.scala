@@ -1,8 +1,7 @@
 package graphique.localbackend
 
 import java.nio.file.Path
-
-import graphique.{Dimensions, ImageProcessor}
+import graphique.imaging.{Dimensions, ImageProcessor}
 
 /**
  * A local backend implementation that stores the image files on the local filesystem and serves the images
