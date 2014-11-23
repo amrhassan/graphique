@@ -1,7 +1,5 @@
 package graphique
 
-import graphique.image.Attributes$
-
 /**
  * An image storing/serving backend that handles all the necessary low-level work.
  */
@@ -26,5 +24,5 @@ trait Backend {
    * @param attributes the set of desired attributes of the returned image
    * @return an image URL if it were available existed
    */
-  def imageUrl(tag: String, attributes: Attributes): Option[String]
+  def imageUrl(tag: String, attributes: image.Attributes): Option[String]
 }

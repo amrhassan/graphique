@@ -1,7 +1,6 @@
 package graphique.localbackend
 
-import graphique.Backend
-import graphique.image.Attributes$
+import graphique.{Backend, image}
 
 private[localbackend] trait LocalBackend extends Backend {
 
@@ -15,6 +14,6 @@ private[localbackend] trait LocalBackend extends Backend {
     io.writeData(rawImage, filePaths.ofRawImage(tag))
   }
 
-  def imageUrl(tag: String, attributes: Attributes): Option[String] =
+  def imageUrl(tag: String, attributes: image.Attributes): Option[String] =
     imageServer.urlFor(tag, attributes)
 }
