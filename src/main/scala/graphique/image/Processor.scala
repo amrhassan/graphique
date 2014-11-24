@@ -11,7 +11,7 @@ import net.coobird.thumbnailator.Thumbnails
  */
 class Processor(desiredAttributes: Attributes) {
 
-  case class ProcessingError(cause: Throwable)
+  case class ProcessingError(cause: Throwable) extends RuntimeException(cause)
 
   /**
    * Processes the input raw image into an image with the given desired attributes.

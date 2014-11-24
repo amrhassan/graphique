@@ -3,4 +3,5 @@ package graphique.backends
 /**
  * Thrown when [[Backend.submit()]] fails.
  */
-case class ImageSubmissionError(message: String, cause: Throwable) extends RuntimeException(message, cause)
+case class ImageSubmissionError(imageTag: String, cause: Throwable) extends
+  RuntimeException(s"Failed to submit $imageTag", cause)
