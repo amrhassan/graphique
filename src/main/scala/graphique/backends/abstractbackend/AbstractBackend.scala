@@ -22,7 +22,7 @@ trait AbstractBackend extends Backend {
   /**
    * The processor of raw images into processed images.
    */
-  protected def imageProcessor: image.Processor
+  protected def imageProcessor: image.ImageProcessor
 
   /**
    * The provider of servable image URLs.
@@ -41,7 +41,7 @@ trait AbstractBackend extends Backend {
     }
   }
 
-  override final def imageUrl(tag: String, attributes: image.Attributes): Option[String] = {
+  override final def imageUrl(tag: String, attributes: image.ImageAttributes): Option[String] = {
 
     // TODO: Log this call
 

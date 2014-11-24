@@ -27,5 +27,5 @@ trait Backend {
    * @return an image URL if it were available existed
    * @throws ImageProcessingError when an error occurs while processing the requested image
    */
-  def imageUrl(tag: String, attributes: image.Attributes): Option[String]
+  def imageUrl(tag: String, attributes: image.ImageAttributes): Option[String]
 }

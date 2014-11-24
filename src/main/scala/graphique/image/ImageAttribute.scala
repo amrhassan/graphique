@@ -18,20 +18,20 @@ package graphique.image
  *                       |- OriginalFormat
  *                       |- TranscodedFormat(imageFormat)
  */
-private[image] class Attribute
+private[image] class ImageAttribute
 
 
-private[image] object Attribute {
+private[image] object ImageAttribute {
 
   /**
    * The output format of an image.
    */
-  sealed trait Format extends Attribute
+  sealed trait Format extends ImageAttribute
 
   /**
    * The output size of an image.
    */
-  sealed trait Size extends Attribute
+  sealed trait Size extends ImageAttribute
 
   /**
    * The image size should fit within the given dimensions.

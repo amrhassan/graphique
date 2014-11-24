@@ -9,5 +9,5 @@ class ImageServer(val port: Int) {
 
   def urlFor(tag: String): Option[String] = ???
 
-  def urlFor(tag: String, attributes: image.Attributes): Option[String] = ???
+  def urlFor(tag: String, attributes: image.ImageAttributes): Option[String] = ???
 }

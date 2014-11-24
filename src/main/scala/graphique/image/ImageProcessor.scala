@@ -9,7 +9,7 @@ import net.coobird.thumbnailator.Thumbnails
  *
  * @param desiredAttributes the desired attributes of the output image
  */
-class Processor(desiredAttributes: Attributes) {
+class ImageProcessor(desiredAttributes: ImageAttributes) {
 
   case class ProcessingError(cause: Throwable) extends RuntimeException(cause)
 
@@ -24,13 +24,13 @@ class Processor(desiredAttributes: Attributes) {
     val thumbnailator = Thumbnails.of(inputStream)
 
     val sizedThumbnailator = desiredAttributes.size match {
-      case Attribute.OriginalSize => thumbnailator
-      case Attribute.SizeWithin(dimensions) => thumbnailator.size(dimensions.width, dimensions.height)
+      case ImageAttribute.OriginalSize => thumbnailator
+      case ImageAttribute.SizeWithin(dimensions) => thumbnailator.size(dimensions.width, dimensions.height)
     }
 
     val formattedThumbnailator = desiredAttributes.format match {
-      case Attribute.OriginalFormat => thumbnailator
-      case Attribute.TranscodedFormat(format) => format match {
+      case ImageAttribute.OriginalFormat => thumbnailator
+      case ImageAttribute.TranscodedFormat(format) => format match {
         case PNGFormat => thumbnailator.outputFormat("PNG")
         case JPEGFormat(quality) => thumbnailator.outputFormat("JPEG").outputQuality(quality)
       }

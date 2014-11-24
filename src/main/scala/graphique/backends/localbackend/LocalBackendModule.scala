@@ -3,7 +3,7 @@ package graphique.backends.localbackend
 import java.nio.file.Path
 
 import graphique.backends.abstractbackend.{RawImageManager, ImageManager, URLProvider, AbstractBackend}
-import graphique.image.Processor
+import graphique.image.ImageProcessor
 
 /**
  * A local backend implementation that stores the image files on the local filesystem and serves the images
@@ -28,7 +28,7 @@ class LocalBackendModule(storageLocation: Path, httpPort: Int) extends AbstractB
 
   override protected def images: ImageManager = new LocalImageManager(filePaths, io)
 
-  override protected def imageProcessor: Processor = ???
+  override protected def imageProcessor: ImageProcessor = ???
 
   override protected def urls: URLProvider = ???
 }

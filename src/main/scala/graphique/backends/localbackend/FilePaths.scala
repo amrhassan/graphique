@@ -54,6 +54,6 @@ private[localbackend] object FilePaths {
   /**
    * Computes and returns the MD5 hexadecimal hash value of the input ImageAttributes.
    */
-  def hashImageAttributes(imageAttributes: image.Attributes): String =
+  def hashImageAttributes(imageAttributes: image.ImageAttributes): String =
     DigestUtils md5Hex imageAttributes.toString.toLowerCase
 }
