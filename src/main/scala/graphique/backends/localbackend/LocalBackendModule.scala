@@ -14,12 +14,6 @@ import graphique.image.ImageProcessor
  */
 class LocalBackendModule(storageLocation: Path, httpPort: Int) extends AbstractBackend {
 
-//  def io: IO = new IO
-//
-//  def filePaths: FilePaths = new FilePaths(storageLocation)
-//
-//  def imageServer: ImageServer = new ImageServer(httpPort)
-
   private lazy val filePaths = new FilePaths(storageLocation)
 
   private lazy val io = new IO
@@ -28,7 +22,8 @@ class LocalBackendModule(storageLocation: Path, httpPort: Int) extends AbstractB
 
   override protected def images: ImageManager = new LocalImageManager(filePaths, io)
 
-  override protected def imageProcessor: ImageProcessor = ???
+  override protected def imageProcessor: ImageProcessor = new ImageProcessor
 
-  override protected def urls: URLProvider = ???
+  override protected def urls: URLProvider = new ImageServer(httpPort, filePaths)
+
 }

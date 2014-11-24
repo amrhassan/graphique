@@ -6,10 +6,8 @@ import net.coobird.thumbnailator.Thumbnails
 
 /**
  * A processor of raw images.
- *
- * @param desiredAttributes the desired attributes of the output image
  */
-class ImageProcessor(desiredAttributes: ImageAttributes) {
+class ImageProcessor {
 
   case class ProcessingError(cause: Throwable) extends RuntimeException(cause)
 
@@ -17,8 +15,9 @@ class ImageProcessor(desiredAttributes: ImageAttributes) {
    * Processes the input raw image into an image with the given desired attributes.
    *
    * @param image the input image
+   * @param desiredAttributes the desired attributes of the output image
    */
-  def process(image: Array[Byte]): Either[ProcessingError, Array[Byte]] = {
+  def process(image: Array[Byte], desiredAttributes: ImageAttributes): Either[ProcessingError, Array[Byte]] = {
 
     val inputStream = new ByteArrayInputStream(image)
     val thumbnailator = Thumbnails.of(inputStream)

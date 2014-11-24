@@ -1,13 +1,11 @@
 package graphique.backends.localbackend
 
-import graphique.image
+import graphique.backends.abstractbackend.{RequestedImage, URLProvider}
 
 /**
  * The HTTP image server
  */
-class ImageServer(val port: Int) {
+class ImageServer(val port: Int, filePaths: FilePaths) extends URLProvider {
 
-  def urlFor(tag: String): Option[String] = ???
-
-  def urlFor(tag: String, attributes: image.ImageAttributes): Option[String] = ???
+  override def forRequestedImage(requestedImage: RequestedImage): Option[String] = ???
 }
