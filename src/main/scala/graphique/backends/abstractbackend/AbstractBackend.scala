@@ -1,7 +1,8 @@
-package graphique.abstractbackend
+package graphique.backends.abstractbackend
 
+import graphique.backends.{ImageSubmissionError, Backend}
 import graphique.image.Attributes
-import graphique.{Backend, ImageSubmissionError, image}
+import graphique.image
 
 trait AbstractBackend extends Backend {
 

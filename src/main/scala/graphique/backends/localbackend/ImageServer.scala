@@ -1,4 +1,4 @@
-package graphique.localbackend
+package graphique.backends.localbackend
 
 import graphique.image
 

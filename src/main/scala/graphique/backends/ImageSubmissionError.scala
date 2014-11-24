@@ -1,4 +1,4 @@
-package graphique
+package graphique.backends
 
 /**
  * Thrown when [[Backend.submit()]] fails.

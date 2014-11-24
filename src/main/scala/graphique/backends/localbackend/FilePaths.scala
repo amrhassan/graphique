@@ -1,4 +1,4 @@
-package graphique.localbackend
+package graphique.backends.localbackend
 
 import java.nio.file.Path
 import org.apache.commons.codec.digest.DigestUtils

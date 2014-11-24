@@ -1,4 +1,4 @@
-package graphique.abstractbackend
+package graphique.backends.abstractbackend
 
 import graphique.image
 

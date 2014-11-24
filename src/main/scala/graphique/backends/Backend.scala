@@ -1,4 +1,6 @@
-package graphique
+package graphique.backends
+
+import graphique.image
 
 /**
  * An image storing/serving backend that handles all the necessary low-level work.

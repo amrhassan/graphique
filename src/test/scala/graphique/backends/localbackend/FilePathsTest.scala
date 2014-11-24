@@ -1,4 +1,4 @@
-package graphique.localbackend
+package graphique.backends.localbackend
 
 import java.nio.file.Paths
 import graphique.image
