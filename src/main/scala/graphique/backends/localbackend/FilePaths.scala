@@ -1,6 +1,7 @@
 package graphique.backends.localbackend
 
 import java.nio.file.Path
+import graphique.backends.abstractbackend.RequestedImage
 import org.apache.commons.codec.digest.DigestUtils
 import graphique.image
 
@@ -27,12 +28,25 @@ private[localbackend] class FilePaths(storageLocation: Path) {
    * The path to the image.
    *
    * This is where the raw image after processing should be cached to.
-   *
-   * @param tag the identifier of the image
-   * @param attributes the attributes of the requested image
    */
-  def ofImage(tag: String, attributes: image.Attributes): Path =
-    imagePath resolve (tag + "-" + hashImageAttributes(attributes))
+  def ofImage(requestedImage: RequestedImage): Path =
+    imagePath resolve (requestedImage.tag + "-" + hashImageAttributes(requestedImage.attributes))
+
+  /**
+   * The scheme in which the given image is stored in the cache.
+   *
+   * The result should be interpreted as (directoryPath, globMatchingAllImageInstances).
+   *
+   * Example:
+   *  For the image tagged "aj42", the response should be something like:
+   *    (Path("/images_path"), "aj42-*")
+   *
+   *
+   * This is a very specific thing to require, though it is needed in some other part of the
+   * system and I would rather to have all the image path related logic to be contained here.
+   */
+  def imagePathScheme(imageTag: String): (Path, String) = (imagePath, s"$imageTag-*")
+
 }
 
 private[localbackend] object FilePaths {

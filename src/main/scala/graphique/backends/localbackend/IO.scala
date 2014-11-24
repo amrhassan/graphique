@@ -1,6 +1,8 @@
 package graphique.backends.localbackend
 
-import java.nio.file.{Files, Path}
+import java.io.IOException
+import java.nio.file.{FileAlreadyExistsException, Files, Path}
+import graphique.backends.abstractbackend.IOError
 
 /**
  * Low-level IO operations.
@@ -13,12 +15,18 @@ private[localbackend] class IO {
    *
    * @param data raw data
    * @param dest file destination
+   * @throws IOError
    */
   def writeData(data: Array[Byte], dest: Path): Unit = {
     val parent = dest.getParent
-    if (!exists(parent))
-      createDirectories(parent)
-    Files.write(dest, data)
+
+    try {
+      if (!exists(parent))
+        createDirectories(parent)
+      Files.write(dest, data)
+    } catch {
+      case e: IOException => throw new IOError(e)
+    }
   }
 
   /**
@@ -33,8 +41,45 @@ private[localbackend] class IO {
    * Creates the directory at the given path and all the directories leading to it.
    *
    * @param directory the directory path
+   * @throws IOError
    */
   def createDirectories(directory: Path): Unit = {
-    Files.createDirectories(directory)
+    try {
+      Files.createDirectories(directory)
+    } catch {
+      case e: IOException => throw new IOError(e)
+      case e: FileAlreadyExistsException => throw new IOError(e)
+    }
+  }
+
+  /**
+   * Reads and returns all the bytes from the file pointed to by the given path.
+   *
+   * @throws IOError
+   */
+  def readData(path: Path): Array[Byte] =
+    try {
+      Files.readAllBytes(path)
+    } catch {
+      case e: IOException => throw new IOError(e)
+    }
+
+  /**
+   * Delete files matched by the given glob in the given directory path.
+   *
+   * Example:
+   *  deleteFiles(Paths.get("/home/amr/files), "log-*")
+   *
+   * @param directory
+   * @param glob
+   * @throws IOError
+   */
+  def deleteFiles(directory: Path, glob: String): Unit = {
+    try {
+      import scala.collection.JavaConversions._
+      Files.newDirectoryStream(directory, glob) foreach Files.delete
+    } catch {
+      case e: IOException => throw new IOError(e)
+    }
   }
 }

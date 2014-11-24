@@ -1,6 +1,7 @@
 package graphique.backends.localbackend
 
 import java.nio.file.Paths
+import graphique.backends.abstractbackend.RequestedImage
 import graphique.image
 import graphique.image.{Dimensions, PNGFormat, JPEGFormat}
 import org.apache.commons.lang3.RandomStringUtils
@@ -30,7 +31,7 @@ class FilePathsTest extends FunSuite {
     val randomTag = RandomStringUtils.randomAlphanumeric(20)
     val attributes = image.Attributes.originalImage.resizedTo(Dimensions(42, 22)).transcodedTo(JPEGFormat(0.3))
 
-    val path = filePaths ofImage(randomTag, attributes)
+    val path = filePaths ofImage RequestedImage(randomTag, attributes)
 
     for (_ <- 1 to 100) {
       val newTag = randomTag + ""
@@ -39,7 +40,7 @@ class FilePathsTest extends FunSuite {
       val newAttributes = attributes.copy()
       assert(newAttributes ne attributes)
 
-      assert(path === (filePaths ofImage(newTag, newAttributes)))
+      assert(path === (filePaths ofImage RequestedImage(newTag, newAttributes)))
     }
   }
 
@@ -49,8 +50,8 @@ class FilePathsTest extends FunSuite {
     val attributes = image.Attributes.originalImage.resizedTo(Dimensions(42, 22)).transcodedTo(PNGFormat)
     val differentAttributes = attributes.transcodedTo(JPEGFormat(0.3))
 
-    val path = filePaths ofImage(randomTag, attributes)
+    val path = filePaths ofImage RequestedImage(randomTag, attributes)
 
-    assert(path !== (filePaths ofImage(randomTag, differentAttributes)))
+    assert(path !== (filePaths ofImage RequestedImage(randomTag, differentAttributes)))
   }
 }
