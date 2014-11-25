@@ -51,7 +51,7 @@ trait AbstractBackend extends Backend {
 
       val rawImage = rawImages.read(tag)
 
-      if (rawImage.isEmpty)
+      if (rawImage.isEmpty) ()
         // TODO: Log about requesting an image that doesn't exist
 
       rawImage foreach { rawImage =>

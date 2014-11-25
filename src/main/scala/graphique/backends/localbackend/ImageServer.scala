@@ -7,5 +7,5 @@ import graphique.backends.abstractbackend.{RequestedImage, URLProvider}
  */
 class ImageServer(val port: Int, filePaths: FilePaths) extends URLProvider {
 
-  override def forRequestedImage(requestedImage: RequestedImage): Option[String] = ???
+  override def forRequestedImage(requestedImage: RequestedImage): Option[String] = None
 }
