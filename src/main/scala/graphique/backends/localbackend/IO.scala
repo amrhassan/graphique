@@ -1,7 +1,7 @@
 package graphique.backends.localbackend
 
 import java.io.IOException
-import java.nio.file.{NoSuchFileException, FileAlreadyExistsException, Files, Path}
+import java.nio.file._
 
 import graphique.backends.abstractbackend.IOError
 
@@ -81,6 +81,7 @@ private[localbackend] class IO {
       Files.newDirectoryStream(directory, glob) foreach Files.delete
     } catch {
       case _: NoSuchFileException => ()
+      case _: NotDirectoryException => ()
       case e: IOException => throw new IOError(e)
     }
   }
