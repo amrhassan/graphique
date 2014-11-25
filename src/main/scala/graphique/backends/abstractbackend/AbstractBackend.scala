@@ -56,7 +56,7 @@ trait AbstractBackend extends Backend {
 
       rawImage foreach { rawImage =>
 
-        val errorOrImage = imageProcessor.process(rawImage)
+        val errorOrImage = imageProcessor.process(rawImage, attributes)
 
         errorOrImage match {
           case Right(processedImage) => images.cacheImage(requestedImage, processedImage)
