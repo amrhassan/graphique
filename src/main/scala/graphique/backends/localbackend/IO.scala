@@ -1,7 +1,8 @@
 package graphique.backends.localbackend
 
 import java.io.IOException
-import java.nio.file.{FileAlreadyExistsException, Files, Path}
+import java.nio.file.{NoSuchFileException, FileAlreadyExistsException, Files, Path}
+
 import graphique.backends.abstractbackend.IOError
 
 /**
@@ -65,7 +66,7 @@ private[localbackend] class IO {
     }
 
   /**
-   * Delete files matched by the given glob in the given directory path.
+   * Delete files matched by the given glob in the given directory path, if any existed.
    *
    * Example:
    *  deleteFiles(Paths.get("/home/amr/files), "log-*")
@@ -79,6 +80,7 @@ private[localbackend] class IO {
       import scala.collection.JavaConversions._
       Files.newDirectoryStream(directory, glob) foreach Files.delete
     } catch {
+      case _: NoSuchFileException => ()
       case e: IOException => throw new IOError(e)
     }
   }
