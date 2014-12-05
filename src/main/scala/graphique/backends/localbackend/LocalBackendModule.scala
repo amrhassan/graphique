@@ -2,7 +2,7 @@ package graphique.backends.localbackend
 
 import java.nio.file.Path
 
-import graphique.backends.abstractbackend.{RawImageManager, ImageManager, URLProvider, AbstractBackend}
+import graphique.backends.abstractbackend._
 import graphique.image.ImageProcessor
 
 /**
@@ -18,12 +18,11 @@ class LocalBackendModule(storageLocation: Path, httpPort: Int) extends AbstractB
 
   private lazy val io = new IO
 
-  override protected def rawImages: RawImageManager = new LocalRawImageManager(filePaths, io)
+  override protected lazy val rawImages: RawImageManager = new LocalRawImageManager(filePaths, io)
 
-  override protected def images: ImageManager = new LocalImageManager(filePaths, io)
-
-  override protected def imageProcessor: ImageProcessor = new ImageProcessor
-
-  override protected def urls: URLProvider = new ImageServer(httpPort, filePaths)
+  override protected def images: ImageManager =
+    new LocalImageManager(cache = new LocalRequestedImageCache(filePaths, io),
+                           urlScheme = new ImageServer(httpPort, filePaths),
+                           imageProcessor = new ImageProcessor)
 
 }
