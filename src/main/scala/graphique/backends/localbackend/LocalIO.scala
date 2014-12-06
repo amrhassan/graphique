@@ -4,11 +4,12 @@ import java.io.IOException
 import java.nio.file._
 
 import graphique.backends.abstractbackend.IOError
+import net.sf.jmimemagic.{MagicException, MagicMatchNotFoundException, MagicParseException, Magic}
 
 /**
  * Low-level IO operations.
  */
-private[localbackend] class IO {
+private[localbackend] class LocalIO {
 
   /**
    * Writes the raw data to the local file destination. If the file destination
@@ -85,4 +86,17 @@ private[localbackend] class IO {
       case e: IOException => throw new IOError(e)
     }
   }
+
+  /**
+   * Detects the mime type of data, if possible.
+   */
+  def detectMimeType(data: Array[Byte]): Option[String] =
+    try {
+      Some(Magic.getMagicMatch(data).getMimeType)
+    } catch {
+      case _: MagicParseException => None
+      case _: MagicMatchNotFoundException => None
+      case _: MagicException => None
+    }
+
 }

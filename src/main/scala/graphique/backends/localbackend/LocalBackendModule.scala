@@ -16,13 +16,13 @@ class LocalBackendModule(storageLocation: Path, httpPort: Int) extends AbstractB
 
   private lazy val filePaths = new FilePaths(storageLocation)
 
-  private lazy val io = new IO
+  private lazy val io = new LocalIO
 
   override protected lazy val rawImages: RawImageManager = new LocalRawImageManager(filePaths, io)
 
   override protected def images: ImageManager =
     new LocalImageManager(cache = new LocalRequestedImageCache(filePaths, io),
-                           urlScheme = new ImageServer(httpPort, filePaths),
+                           urlScheme = new ImageServer(httpPort, filePaths, io),
                            imageProcessor = new ImageProcessor)
 
 }

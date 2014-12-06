@@ -2,7 +2,7 @@ package graphique.backends.localbackend
 
 import graphique.backends.abstractbackend.RawImageManager
 
-class LocalRawImageManager(filePaths: FilePaths, io: IO) extends RawImageManager{
+class LocalRawImageManager(filePaths: FilePaths, io: LocalIO) extends RawImageManager{
 
   override def store(tag: String, image: Array[Byte]): Unit = {
     val path = filePaths ofRawImage tag

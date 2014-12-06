@@ -33,6 +33,13 @@ private[localbackend] class FilePaths(storageLocation: Path) {
     imagePath resolve (requestedImage.tag + "-" + hashImageAttributes(requestedImage.attributes))
 
   /**
+   * The local path for the file corresponding to the requested ID coming through HTTP.
+   *
+   * @param identifier the ID coming in and in need to be matched to a filesystem path
+   */
+  def ofUrlComponent(identifier: String): Path = imagePath resolve identifier
+
+  /**
    * The scheme in which the given image is stored in the cache.
    *
    * The result should be interpreted as (directoryPath, globMatchingAllImageInstances).

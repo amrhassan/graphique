@@ -2,7 +2,7 @@ package graphique.backends.localbackend
 
 import graphique.backends.abstractbackend.{RequestedImage, RequestedImageCache}
 
-class LocalRequestedImageCache(filePaths: FilePaths, io: IO) extends RequestedImageCache{
+class LocalRequestedImageCache(filePaths: FilePaths, io: LocalIO) extends RequestedImageCache{
 
   override def has(requestedImage: RequestedImage): Boolean =
     io exists (filePaths ofImage requestedImage)
