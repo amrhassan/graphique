@@ -3,9 +3,9 @@ package graphique.backends.localbackend
 import java.net.InetSocketAddress
 
 import akka.actor._
+import akka.io.{IO, Tcp}
 import graphique.backends.abstractbackend.{RequestedImage, URLProvider}
-import akka.io.{Tcp, IO}
-import net.sf.jmimemagic.{Magic, MagicParser}
+import net.sf.jmimemagic.Magic
 import spray.can.Http
 import spray.http._
 
@@ -67,7 +67,7 @@ class ImageServer(port: Int, filePaths: FilePaths, localIO: LocalIO) extends URL
 
       case Http.Connected(remoteAddress, localAddress) =>
         val requestHandler =
-          context actorOf Props(new RequestHandler(remoteAddress, localAddress))
+          context actorOf Props(new RequestHandler)
         sender ! Http.Register(requestHandler)
 
 
@@ -75,8 +75,7 @@ class ImageServer(port: Int, filePaths: FilePaths, localIO: LocalIO) extends URL
     }
   }
 
-  private class RequestHandler(remoteAddress: InetSocketAddress, localAddress: InetSocketAddress)
-    extends Actor with ActorLogging {
+  private class RequestHandler extends Actor with ActorLogging {
 
     import RequestHandler._
 
