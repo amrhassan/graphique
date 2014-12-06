@@ -70,6 +70,7 @@ class ImageServer(port: Int, filePaths: FilePaths, localIO: LocalIO) extends URL
           context actorOf Props(new RequestHandler(remoteAddress, localAddress))
         sender ! Http.Register(requestHandler)
 
+
       case message => log warning s"Unexpected message: $message"
     }
   }
@@ -86,17 +87,19 @@ class ImageServer(port: Int, filePaths: FilePaths, localIO: LocalIO) extends URL
         val filePath = filePaths ofUrlComponent id
         if (!(localIO exists filePath))
           sender ! notFoundResponse
-        else
-          Try {
+        else {
+          val response = Try {
             val image = localIO readData filePath
             val mime = localIO detectMimeType image
             (mime, image)
           } match {
             case Success((Some(mime), image)) =>
-              sender ! HttpResponse(entity = HttpEntity(ContentType(MediaType.custom(mime)), image))
+              HttpResponse(entity = HttpEntity(ContentType(MediaType.custom(mime)), image))
             case Failure(_) => errorResponse
             case _ => errorResponse
           }
+          sender ! response
+        }
 
       case Tcp.PeerClosed =>
         context stop self
@@ -107,8 +110,12 @@ class ImageServer(port: Int, filePaths: FilePaths, localIO: LocalIO) extends URL
       case Http.ConfirmedClosed =>
         context stop self
 
+      case Http.Closed =>
+        context stop self
+
       case message =>
         log warning s"Unexpected message: $message"
+        context stop self
     }
   }
 
