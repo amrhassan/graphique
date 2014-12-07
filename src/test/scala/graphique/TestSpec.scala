@@ -15,7 +15,7 @@ trait TestSpec extends FunSuiteLike with BeforeAndAfterAll with MockFactory {
    * Reads resource file content and returns it.
    */
   def readResource(name: String): Array[Byte] = {
-    val file = new File((ClassLoader getSystemResource name).getFile)
+    val file = new File((getClass.getClassLoader getResource name).getFile)
     Files.readAllBytes(file.toPath)
   }
 }
