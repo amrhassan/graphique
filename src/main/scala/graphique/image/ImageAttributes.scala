@@ -39,4 +39,6 @@ case object ImageAttributes {
    */
   lazy val originalImage =
     ImageAttributes(size = ImageAttribute.OriginalSize, format = ImageAttribute.OriginalFormat)
+
+  def apply(): ImageAttributes = originalImage
 }

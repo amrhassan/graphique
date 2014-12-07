@@ -1,4 +1,4 @@
-package graphique.backends.abstractbackend
+package graphique.backends
 
 trait URLProvider {
 

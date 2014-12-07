@@ -3,12 +3,16 @@ name := "graphique"
 
 scalaVersion := "2.11.4"
 
+val akkaVersion = "2.3.7"
+val sprayVersion = "1.3.2"
+
 libraryDependencies ++= Seq(
   "net.coobird" % "thumbnailator" % "0.4.7",
   "commons-codec" % "commons-codec" % "1.10",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
-  "io.spray" %% "spray-can" % "1.3.2",
-  "com.typesafe.akka" %% "akka-actor" % "2.3.7",
+  "io.spray" %% "spray-can" % s"$sprayVersion",
+  "com.typesafe.akka" %% "akka-actor" % s"$akkaVersion",
+  "com.typesafe.akka" %% "akka-testkit" % s"$akkaVersion",
   "jmimemagic" % "jmimemagic" % "0.1.2",
   "org.scalatest" %% "scalatest" % "2.2.1" % "test",
   "org.scalamock" %% "scalamock-scalatest-support" % "3.2" % "test",

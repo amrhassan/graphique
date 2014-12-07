@@ -1,7 +1,7 @@
 package graphique.backends.localbackend
 
 import java.nio.file.Path
-import graphique.backends.abstractbackend.RequestedImage
+import graphique.backends.RequestedImage
 import org.apache.commons.codec.digest.DigestUtils
 import graphique.image
 

@@ -4,7 +4,7 @@ import java.net.InetSocketAddress
 
 import akka.actor._
 import akka.io.{IO, Tcp}
-import graphique.backends.abstractbackend.{RequestedImage, URLProvider}
+import graphique.backends.{URLProvider, RequestedImage}
 import net.sf.jmimemagic.Magic
 import spray.can.Http
 import spray.http._

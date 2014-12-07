@@ -1,6 +1,5 @@
-package graphique.backends.abstractbackend
+package graphique.backends
 
-import graphique.backends.ImageProcessingError
 import graphique.image.ImageProcessor
 
 /**
@@ -8,11 +7,11 @@ import graphique.image.ImageProcessor
  */
 trait ImageManager {
 
-  protected[abstractbackend] def cache: RequestedImageCache
+  def cache: RequestedImageCache
 
-  protected def imageProcessor: ImageProcessor
+  def imageProcessor: ImageProcessor
 
-  protected def urlScheme: URLProvider
+  def urlScheme: URLProvider
 
   /**
    * Provide a servable URL for the requested image.

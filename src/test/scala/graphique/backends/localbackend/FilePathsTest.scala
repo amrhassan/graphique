@@ -1,7 +1,7 @@
 package graphique.backends.localbackend
 
 import java.nio.file.Paths
-import graphique.backends.abstractbackend.RequestedImage
+import graphique.backends.RequestedImage
 import graphique.image
 import graphique.image.{Dimensions, PNGFormat, JPEGFormat}
 import org.apache.commons.lang3.RandomStringUtils

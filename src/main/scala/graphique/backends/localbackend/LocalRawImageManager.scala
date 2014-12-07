@@ -1,6 +1,6 @@
 package graphique.backends.localbackend
 
-import graphique.backends.abstractbackend.RawImageManager
+import graphique.backends.RawImageManager
 
 class LocalRawImageManager(filePaths: FilePaths, io: LocalIO) extends RawImageManager{
 

@@ -1,6 +1,6 @@
 package graphique.backends.localbackend
 
-import graphique.backends.abstractbackend.{RequestedImage, RequestedImageCache}
+import graphique.backends.{RequestedImageCache, RequestedImage}
 
 class LocalRequestedImageCache(filePaths: FilePaths, io: LocalIO) extends RequestedImageCache{
 

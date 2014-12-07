@@ -3,13 +3,14 @@ package graphique.backends.localbackend
 import java.io.IOException
 import java.nio.file._
 
-import graphique.backends.abstractbackend.IOError
 import net.sf.jmimemagic.{MagicException, MagicMatchNotFoundException, MagicParseException, Magic}
 
 /**
  * Low-level IO operations.
  */
 private[localbackend] class LocalIO {
+
+  import graphique.backends._
 
   /**
    * Writes the raw data to the local file destination. If the file destination

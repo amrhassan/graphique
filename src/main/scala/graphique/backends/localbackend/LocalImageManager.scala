@@ -1,6 +1,6 @@
 package graphique.backends.localbackend
 
-import graphique.backends.abstractbackend.{RequestedImageCache, URLProvider, ImageManager}
+import graphique.backends.{URLProvider, RequestedImageCache, ImageManager}
 import graphique.image.ImageProcessor
 
 class LocalImageManager(val cache: RequestedImageCache,
