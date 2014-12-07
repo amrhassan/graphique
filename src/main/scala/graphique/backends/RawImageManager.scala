@@ -1,7 +1,5 @@
 package graphique.backends
 
-import graphique.backends.abstractbackend._
-
 trait RawImageManager {
 
   /**
