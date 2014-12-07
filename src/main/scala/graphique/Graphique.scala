@@ -2,7 +2,7 @@ package graphique
 
 import akka.actor.{ActorLogging, Actor}
 import graphique.backends.{RequestedImage, ImageManager, RawImageManager}
-import graphique.image.ImageValidator
+import graphique.images.ImageValidator
 
 /**
  * The entry point to the Graphique microservice.
@@ -65,7 +65,7 @@ object Graphique {
    * @param tag the identifier tag of the requested image
    * @param attributes the attributes of the requested image
    */
-  case class RequestImageUrl(tag: String, attributes: image.ImageAttributes)
+  case class RequestImageUrl(tag: String, attributes: images.ImageAttributes)
 
   case object RequestedImageNotFound
 

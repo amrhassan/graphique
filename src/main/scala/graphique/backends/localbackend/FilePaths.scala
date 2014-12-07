@@ -3,7 +3,7 @@ package graphique.backends.localbackend
 import java.nio.file.Path
 import graphique.backends.RequestedImage
 import org.apache.commons.codec.digest.DigestUtils
-import graphique.image
+import graphique.images
 
 /**
  * The single authoritative point for where files should be stored.
@@ -61,6 +61,6 @@ private[localbackend] object FilePaths {
   /**
    * Computes and returns the MD5 hexadecimal hash value of the input ImageAttributes.
    */
-  def hashImageAttributes(imageAttributes: image.ImageAttributes): String =
+  def hashImageAttributes(imageAttributes: images.ImageAttributes): String =
     DigestUtils md5Hex imageAttributes.toString.toLowerCase
 }

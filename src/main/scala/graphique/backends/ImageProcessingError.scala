@@ -1,6 +1,6 @@
 package graphique.backends
 
-import graphique.image
+import graphique.images
 
-case class ImageProcessingError(imageTag: String, desiredAttributes: image.ImageAttributes, cause: Throwable)
+case class ImageProcessingError(imageTag: String, desiredAttributes: images.ImageAttributes, cause: Throwable)
   extends RuntimeException(s"Failed while processing the image for $imageTag: $desiredAttributes", cause)

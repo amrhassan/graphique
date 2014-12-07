@@ -1,4 +1,4 @@
-package graphique.image
+package graphique.images
 
 /**
  * The attributes of an image.

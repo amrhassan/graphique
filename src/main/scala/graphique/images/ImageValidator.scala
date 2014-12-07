@@ -1,4 +1,4 @@
-package graphique.image
+package graphique.images
 
 import java.io.{IOException, ByteArrayOutputStream, ByteArrayInputStream}
 import javax.imageio.IIOException

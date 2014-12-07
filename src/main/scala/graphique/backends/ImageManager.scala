@@ -1,6 +1,6 @@
 package graphique.backends
 
-import graphique.image.ImageProcessor
+import graphique.images.ImageProcessor
 
 /**
  * The manager of processed and servable images

@@ -1,4 +1,4 @@
-package graphique.image
+package graphique.images
 
 /**
  * A single attribute of an image.
@@ -18,10 +18,10 @@ package graphique.image
  *                       |- OriginalFormat
  *                       |- TranscodedFormat(imageFormat)
  */
-private[image] class ImageAttribute
+private[images] class ImageAttribute
 
 
-private[image] object ImageAttribute {
+private[images] object ImageAttribute {
 
   /**
    * The output format of an image.

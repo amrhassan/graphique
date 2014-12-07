@@ -2,7 +2,7 @@ package graphique
 
 import akka.actor.Props
 import graphique.backends.{RequestedImageCache, RawImageManager, ImageManager}
-import graphique.image.ImageAttributes
+import graphique.images.ImageAttributes
 
 class GraphiqueTest extends ActorSpec {
 

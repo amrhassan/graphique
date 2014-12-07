@@ -2,8 +2,8 @@ package graphique.backends.localbackend
 
 import java.nio.file.Paths
 import graphique.backends.RequestedImage
-import graphique.image
-import graphique.image.{Dimensions, PNGFormat, JPEGFormat}
+import graphique.images
+import graphique.images.{Dimensions, PNGFormat, JPEGFormat}
 import org.apache.commons.lang3.RandomStringUtils
 import org.scalatest.FunSuite
 
@@ -29,7 +29,7 @@ class FilePathsTest extends FunSuite {
   test("consistent path of images") {
 
     val randomTag = RandomStringUtils.randomAlphanumeric(20)
-    val attributes = image.ImageAttributes.originalImage.resizedTo(Dimensions(42, 22)).transcodedTo(JPEGFormat(0.3))
+    val attributes = images.ImageAttributes.originalImage.resizedTo(Dimensions(42, 22)).transcodedTo(JPEGFormat(0.3))
 
     val path = filePaths ofImage RequestedImage(randomTag, attributes)
 
@@ -47,7 +47,7 @@ class FilePathsTest extends FunSuite {
   test("different path of images with different attributes") {
 
     val randomTag = RandomStringUtils.randomAlphanumeric(20)
-    val attributes = image.ImageAttributes.originalImage.resizedTo(Dimensions(42, 22)).transcodedTo(PNGFormat)
+    val attributes = images.ImageAttributes.originalImage.resizedTo(Dimensions(42, 22)).transcodedTo(PNGFormat)
     val differentAttributes = attributes.transcodedTo(JPEGFormat(0.3))
 
     val path = filePaths ofImage RequestedImage(randomTag, attributes)

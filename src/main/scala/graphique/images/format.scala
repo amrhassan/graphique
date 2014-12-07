@@ -1,5 +1,5 @@
 
-package graphique.image
+package graphique.images
 
 sealed trait ImageFormat
 

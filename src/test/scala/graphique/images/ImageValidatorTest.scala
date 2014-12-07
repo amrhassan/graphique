@@ -1,4 +1,4 @@
-package graphique.image
+package graphique.images
 
 import graphique.UnitSpec
 

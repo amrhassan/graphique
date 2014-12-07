@@ -1,6 +1,6 @@
 package graphique.backends
 
-import graphique.image
+import graphique.images
 
 /**
  * An image storing/serving backend that handles all the necessary low-level work.
@@ -27,5 +27,5 @@ trait Backend {
    * @return an image URL if it were available existed
    * @throws ImageProcessingError when an error occurs while processing the requested image
    */
-  def imageUrl(tag: String, attributes: image.ImageAttributes): Option[String]
+  def imageUrl(tag: String, attributes: images.ImageAttributes): Option[String]
 }
