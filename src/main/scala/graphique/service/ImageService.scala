@@ -1,19 +1,20 @@
-package graphique
+package graphique.service
 
-import akka.actor.{ActorLogging, Actor}
-import graphique.backends.{RequestedImage, ImageManager, RawImageManager}
+import akka.actor.{Actor, ActorLogging}
+import graphique.backends.{ImageManager, RawImageManager, RequestedImage}
+import graphique.images
 import graphique.images.ImageValidator
 
 /**
  * The entry point to the Graphique microservice.
  */
-class Graphique(rawImages: RawImageManager, images: ImageManager) extends Actor with ActorLogging {
+class ImageService(rawImages: RawImageManager, images: ImageManager) extends Actor with ActorLogging {
 
-  import Graphique._
+  import graphique.service.ImageService._
 
   private val imageValidator = new ImageValidator
 
-  override def receive: Receive = {
+  override final def receive: Receive = {
 
     case SubmitImage(image, tag) =>
       log info s"Submitting an ${image.length}B image with the tag: $tag"
@@ -36,7 +37,7 @@ class Graphique(rawImages: RawImageManager, images: ImageManager) extends Actor 
   }
 }
 
-object Graphique {
+object ImageService {
 
   /**
    * Submit an image.

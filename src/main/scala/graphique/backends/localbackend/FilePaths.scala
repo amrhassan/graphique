@@ -10,7 +10,7 @@ import graphique.images
  *
  * @param storageLocation the root path of all files
  */
-private[localbackend] class FilePaths(storageLocation: Path) {
+class FilePaths(storageLocation: Path) {
 
   private val rawImagePath = storageLocation resolve "raw"
   private val imagePath = storageLocation resolve "image"

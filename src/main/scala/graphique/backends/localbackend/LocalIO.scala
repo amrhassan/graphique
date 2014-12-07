@@ -8,7 +8,7 @@ import net.sf.jmimemagic.{MagicException, MagicMatchNotFoundException, MagicPars
 /**
  * Low-level IO operations.
  */
-private[localbackend] class LocalIO {
+class LocalIO {
 
   import graphique.backends._
 

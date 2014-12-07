@@ -1,12 +1,13 @@
-package graphique
+package graphique.service
 
 import akka.actor.Props
-import graphique.backends.{RequestedImageCache, RawImageManager, ImageManager}
+import graphique.ActorSpec
+import graphique.backends.{ImageManager, RawImageManager, RequestedImageCache}
 import graphique.images.ImageAttributes
 
-class GraphiqueTest extends ActorSpec {
+class ImageServiceTest extends ActorSpec {
 
-  import Graphique._
+  import graphique.service.ImageService._
 
   test("Submitting a valid image") {
 
@@ -15,7 +16,7 @@ class GraphiqueTest extends ActorSpec {
 
     (images.cache _).when().returns(stub[RequestedImageCache])
 
-    val graphique = system actorOf Props(new Graphique(rawImages, images))
+    val graphique = system actorOf Props(new ImageService(rawImages, images))
 
     graphique ! SubmitImage(readResource("like_a_sir.jpg"), "sir")
     expectMsg(ImageSubmissionOK)
@@ -28,7 +29,7 @@ class GraphiqueTest extends ActorSpec {
 
     (images.cache _).when().returns(stub[RequestedImageCache])
 
-    val graphique = system actorOf Props(new Graphique(rawImages, images))
+    val graphique = system actorOf Props(new ImageService(rawImages, images))
 
     graphique ! SubmitImage(readResource("invalid_image.jpg"), "normal_image")
     expectMsg(InvalidSubmittedImage)
@@ -41,7 +42,7 @@ class GraphiqueTest extends ActorSpec {
     val url = "http://localhost/image.png"
     (images.imageUrl _).when(*, *).returns(Some(url))
 
-    val graphique = system actorOf Props(new Graphique(rawImages, images))
+    val graphique = system actorOf Props(new ImageService(rawImages, images))
 
     graphique ! RequestImageUrl("my-face", ImageAttributes.originalImage)
     expectMsg(RequestedImageUrl(url))
@@ -53,7 +54,7 @@ class GraphiqueTest extends ActorSpec {
 
     (images.imageUrl _).when(*, *).returns(None)
 
-    val graphique = system actorOf Props(new Graphique(rawImages, images))
+    val graphique = system actorOf Props(new ImageService(rawImages, images))
 
     graphique ! RequestImageUrl("my-face", ImageAttributes.originalImage)
     expectMsg(RequestedImageNotFound)

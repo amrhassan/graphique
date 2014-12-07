@@ -9,7 +9,7 @@ trait ImageManager {
 
   def cache: RequestedImageCache
 
-  def imageProcessor: ImageProcessor
+  private val imageProcessor = new ImageProcessor
 
   def urlScheme: URLProvider
 
