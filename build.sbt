@@ -11,6 +11,7 @@ libraryDependencies ++= Seq(
   "commons-codec" % "commons-codec" % "1.10",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
   "io.spray" %% "spray-can" % s"$sprayVersion",
+  "io.spray" %% "spray-routing" % s"$sprayVersion",
   "com.typesafe.akka" %% "akka-actor" % s"$akkaVersion",
   "com.typesafe.akka" %% "akka-testkit" % s"$akkaVersion",
   "jmimemagic" % "jmimemagic" % "0.1.2",
