@@ -1,10 +1,8 @@
 package graphique.backends.localbackend
 
-import java.net.InetSocketAddress
-
 import akka.actor._
 import akka.io.{IO, Tcp}
-import graphique.backends.{URLProvider, RequestedImage}
+import graphique.backends.{UrlProvider, RequestedImage}
 import net.sf.jmimemagic.Magic
 import spray.can.Http
 import spray.http._
@@ -14,17 +12,21 @@ import scala.util.{Failure, Success, Try}
 /**
  * The HTTP image server
  */
-class ImageServer(port: Int, filePaths: FilePaths, localIO: LocalIO) extends URLProvider {
+class LocalUrlProvider(port: Int, filePaths: FilePaths, localIO: LocalIO) extends UrlProvider {
   require(port >= 0, "Port number must be positive")
 
-  override def forRequestedImage(requestedImage: RequestedImage): Option[String] = {
-    val hashedAttributes = FilePaths hashImageAttributes requestedImage.attributes
-    val rawFilePath = filePaths ofRawImage requestedImage.tag
-
-    if (localIO exists rawFilePath)
-      Some(s"http://localhost:$port/${requestedImage.tag}-$hashedAttributes")
+  override def forRequestedImage(requestedImage: RequestedImage): Option[String] =
+    if (haveRequestedImageInStock(requestedImage))
+      Some(requestedImageUrl(requestedImage))
     else
       None
+
+  private def haveRequestedImageInStock(requestedImage: RequestedImage): Boolean =
+    localIO exists (filePaths ofRawImage requestedImage.tag)
+
+  private def requestedImageUrl(requestedImage: RequestedImage): String = {
+    val hashedAttributes = FilePaths hashImageAttributes requestedImage.attributes
+    s"http://localhost:$port/${requestedImage.tag}-$hashedAttributes"
   }
 
   implicit val actorSystem = ActorSystem("LocalImageServerActorSystem")

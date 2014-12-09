@@ -11,7 +11,7 @@ trait ImageManager {
 
   private val imageProcessor = new ImageProcessor
 
-  def urlScheme: URLProvider
+  def urlScheme: UrlProvider
 
   /**
    * Provide a servable URL for the requested image.

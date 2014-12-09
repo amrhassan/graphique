@@ -1,6 +1,6 @@
 package graphique.backends
 
-trait URLProvider {
+trait UrlProvider {
 
   /**
    * Returns the servable URL for the requested image, granted it has been processed and

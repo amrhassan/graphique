@@ -31,7 +31,7 @@ object LocalImageService {
     val io = new LocalIO
 
     val requestedImageCache = new LocalRequestedImageCache(filePaths, io)
-    val urlProvider = new ImageServer(httpPort, filePaths, io)
+    val urlProvider = new LocalUrlProvider(httpPort, filePaths, io)
 
     val rawImages = new LocalRawImageManager(filePaths, io)
     val images = new LocalImageManager(requestedImageCache, urlProvider)
