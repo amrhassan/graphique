@@ -15,10 +15,16 @@ import scala.util.{Failure, Success, Try}
  * The HTTP image server
  */
 class ImageServer(port: Int, filePaths: FilePaths, localIO: LocalIO) extends URLProvider {
+  require(port >= 0, "Port number must be positive")
 
   override def forRequestedImage(requestedImage: RequestedImage): Option[String] = {
     val hashedAttributes = FilePaths hashImageAttributes requestedImage.attributes
-    Some(s"http://localhost:$port/${requestedImage.tag}-$hashedAttributes")
+    val rawFilePath = filePaths ofRawImage requestedImage.tag
+
+    if (localIO exists rawFilePath)
+      Some(s"http://localhost:$port/${requestedImage.tag}-$hashedAttributes")
+    else
+      None
   }
 
   implicit val actorSystem = ActorSystem("LocalImageServerActorSystem")
