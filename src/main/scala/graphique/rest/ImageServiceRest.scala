@@ -44,28 +44,21 @@ class ImageServiceRest(imageService: ActorRef, implicit val imageServiceTimeout:
     'format.?.as(imageFormatOptionDeserializer)
   )
 
-  override lazy val route: Route =
-    put {
-      path("submit") {
-        parameters('tag) { tag =>
-          requestEntityPresent {
-            entity(as[Array[Byte]]) { image =>
-              onSuccess (imageService ? SubmitImage(image, tag)) {  // This detaches to an asynchronous call
-                case ImageSubmissionOK => complete(StatusCodes.OK)
-                case InvalidSubmittedImage => complete(StatusCodes.BadRequest)
-              }
-            }
+  override lazy val route: Route = {
+    path("image" / """[^/]+""".r ~ Slash.?) { tag =>
+      (put & requestEntityPresent) {
+        entity(as[Array[Byte]]) { image =>
+          onSuccess (imageService ? SubmitImage(image, tag)) {  // This detaches to an asynchronous call
+            case ImageSubmissionOK => complete(StatusCodes.OK)
+            case InvalidSubmittedImage => complete(StatusCodes.BadRequest)
           }
         }
-      }
-    } ~
-    get {
-      path("image" / """[^/]+""".r ~ Slash.?) { tag =>
-
-        extractImageAttributes { (dimensions, format) =>
+      } ~
+      get {
+        extractImageAttributes { (size, format) =>
 
           var imageAttributes = ImageAttributes.originalImage
-          for (requestedSize <- dimensions)
+          for (requestedSize <- size)
             imageAttributes = imageAttributes.resizedTo(requestedSize)
           for (requestedFormat <- format)
             imageAttributes = imageAttributes.transcodedTo(requestedFormat)
@@ -77,4 +70,5 @@ class ImageServiceRest(imageService: ActorRef, implicit val imageServiceTimeout:
         }
       }
     }
+  }
 }
