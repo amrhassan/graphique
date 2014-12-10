@@ -9,7 +9,6 @@ import spray.httpx.unmarshalling._
 import spray.routing.Route
 
 import scala.concurrent.ExecutionContext
-import scala.util.Try
 
 /**
  * The REST inteface to the ImageService actor.
@@ -39,10 +38,19 @@ class ImageServiceRest(imageService: ActorRef, implicit val imageServiceTimeout:
     } getOrElse Right(None)
   }
 
-  val extractImageAttributes = parameters(
-    'sizeWithin.?.as[Option[Dimensions]](dimensionsOptionDeserializer),
-    'format.?.as(imageFormatOptionDeserializer)
-  )
+  case class RequestedImageAttributes(size: Option[Dimensions], format: Option[ImageFormat]) {
+    lazy val toImageAttributes = {
+      var imageAttributes = ImageAttributes.originalImage
+      for (requestedSize <- size)
+        imageAttributes = imageAttributes.resizedTo(requestedSize)
+      for (requestedFormat <- format)
+        imageAttributes = imageAttributes.transcodedTo(requestedFormat)
+      imageAttributes
+    }
+  }
+
+  val extractImageAttributes = parameters('size.?.as[Option[Dimensions]](dimensionsOptionDeserializer),
+    'format.?.as(imageFormatOptionDeserializer)).as(RequestedImageAttributes)
 
   override lazy val route: Route = {
     path("image" / """[^/]+""".r ~ Slash.?) { tag =>
@@ -55,15 +63,8 @@ class ImageServiceRest(imageService: ActorRef, implicit val imageServiceTimeout:
         }
       } ~
       get {
-        extractImageAttributes { (size, format) =>
-
-          var imageAttributes = ImageAttributes.originalImage
-          for (requestedSize <- size)
-            imageAttributes = imageAttributes.resizedTo(requestedSize)
-          for (requestedFormat <- format)
-            imageAttributes = imageAttributes.transcodedTo(requestedFormat)
-
-          onSuccess(imageService ? RequestImageUrl(tag, imageAttributes)) {
+        extractImageAttributes { requestedImageAttributes =>
+          onSuccess(imageService ? RequestImageUrl(tag, requestedImageAttributes.toImageAttributes)) {
             case RequestedImageNotFound => complete(StatusCodes.NotFound, "Requested image not found")
             case RequestedImageUrl(url) => complete(StatusCodes.OK, url)
           }
