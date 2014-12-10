@@ -54,12 +54,10 @@ class ImageServiceRest(imageService: ActorRef, implicit val imageServiceTimeout:
 
   override lazy val route: Route = {
     path("image" / """[^/]+""".r ~ Slash.?) { tag =>
-      (put & requestEntityPresent) {
-        entity(as[Array[Byte]]) { image =>
-          onSuccess (imageService ? SubmitImage(image, tag)) {  // This detaches to an asynchronous call
-            case ImageSubmissionOK => complete(StatusCodes.OK)
-            case InvalidSubmittedImage => complete(StatusCodes.BadRequest)
-          }
+      (put & requestEntityPresent & entity(as[Array[Byte]])) { image =>
+        onSuccess (imageService ? SubmitImage(image, tag)) {  // This detaches to an asynchronous call
+          case ImageSubmissionOK => complete(StatusCodes.OK)
+          case InvalidSubmittedImage => complete(StatusCodes.BadRequest)
         }
       } ~
       get {
