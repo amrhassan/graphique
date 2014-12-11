@@ -20,7 +20,7 @@ class ImageServiceRest(imageService: ActorRef, implicit val imageServiceTimeout:
 
   implicit val executionContext: ExecutionContext = context.system.dispatcher
 
-  import spray.httpx.SprayJsonSupport._
+  import spray.httpx.SprayJsonSupport.sprayJsonMarshaller
   import JsonProtocol._
   import ImageAttributeDeserializers._
 
