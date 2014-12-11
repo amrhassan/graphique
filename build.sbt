@@ -12,6 +12,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
   "io.spray" %% "spray-can" % s"$sprayVersion",
   "io.spray" %% "spray-routing" % s"$sprayVersion",
+  "io.spray" %% "spray-json" % "1.3.1",
   "com.typesafe.akka" %% "akka-actor" % s"$akkaVersion",
   "com.typesafe.akka" %% "akka-testkit" % s"$akkaVersion",
   "jmimemagic" % "jmimemagic" % "0.1.2",
