@@ -5,11 +5,10 @@ import akka.pattern.ask
 import akka.util.Timeout
 import graphique.images._
 import spray.http.StatusCodes
-import spray.httpx.unmarshalling._
 import spray.routing.Route
 
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * The REST interface to the ImageService actor.
@@ -17,8 +16,6 @@ import scala.concurrent.ExecutionContext
 class ImageServiceRest(imageService: ActorRef, implicit val imageServiceTimeout: Timeout) extends HttpServiceListener {
 
   import graphique.service.ImageService._
-
-  implicit val executionContext: ExecutionContext = context.system.dispatcher
 
   import spray.httpx.SprayJsonSupport.sprayJsonMarshaller
   import JsonProtocol._
@@ -30,15 +27,20 @@ class ImageServiceRest(imageService: ActorRef, implicit val imageServiceTimeout:
   override lazy val route: Route = {
     path("image" / """[^/]+""".r ~ Slash.?) { tag =>
       (put & requestEntityPresent & entity(as[Array[Byte]])) { image =>
-        onSuccess (imageService ? SubmitImage(image, tag)) {  // This detaches to an asynchronous call
-          case ImageSubmissionOK => complete(StatusCodes.Created)
-          case InvalidSubmittedImage => complete(StatusCodes.BadRequest)
+        detach() {
+          onSuccess(imageService ? SubmitImage(image, tag)) {
+            // This detaches to an asynchronous call
+            case ImageSubmissionOK => complete(StatusCodes.Created)
+            case InvalidSubmittedImage => complete(StatusCodes.BadRequest)
+          }
         }
       } ~
       (get & extractImageAttributes) { requestedImageAttributes =>
-        onSuccess(imageService ? RequestImageUrl(tag, requestedImageAttributes.toImageAttributes)) {
-          case RequestedImageNotFound => complete(StatusCodes.NotFound, "Requested image not found")
-          case message: RequestedImageUrl => complete(message)
+        detach() {
+          onSuccess(imageService ? RequestImageUrl(tag, requestedImageAttributes.toImageAttributes)) {
+            case RequestedImageNotFound => complete(StatusCodes.NotFound, "Requested image not found")
+            case message: RequestedImageUrl => complete(message)
+          }
         }
       }
     }

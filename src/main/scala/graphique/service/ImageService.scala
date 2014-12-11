@@ -5,6 +5,9 @@ import graphique.backends.{ImageManager, RawImageManager, RequestedImage}
 import graphique.images
 import graphique.images.ImageValidator
 
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+
 /**
  * The entry point to the Graphique microservice.
  */
@@ -17,22 +20,30 @@ class ImageService(rawImages: RawImageManager, images: ImageManager) extends Act
   override final def receive: Receive = {
 
     case SubmitImage(image, tag) =>
-      log info s"Submitting an ${image.length}B image with the tag: $tag"
+      val originalSender = sender
 
-      if (imageValidator isValid image) {
-        images.cache clearTaggedWith tag
-        rawImages store(tag, image)
-        sender ! ImageSubmissionOK
-      } else {
-        sender ! InvalidSubmittedImage
+      Future {
+        log info s"Submitting an ${image.length}B image with the tag: $tag"
+
+        if (imageValidator isValid image) {
+          images.cache clearTaggedWith tag
+          rawImages store(tag, image)
+          originalSender ! ImageSubmissionOK
+        } else {
+          originalSender ! InvalidSubmittedImage
+        }
       }
 
     case RequestImageUrl(tag, attributes) =>
-      log info s"Requesting the image $tag with attributes $attributes"
-      val urlOption = images imageUrl(RequestedImage(tag, attributes), rawImages read tag)
-      urlOption match {
-        case Some(url) => sender ! RequestedImageUrl(url)
-        case None => sender ! RequestedImageNotFound
+      val originalSender = sender
+
+      Future {
+        log info s"Requesting the image $tag with attributes $attributes"
+        val urlOption = images imageUrl(RequestedImage(tag, attributes), rawImages read tag)
+        urlOption match {
+          case Some(url) => originalSender ! RequestedImageUrl(url)
+          case None => originalSender ! RequestedImageNotFound
+        }
       }
   }
 }
