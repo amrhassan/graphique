@@ -56,16 +56,14 @@ class ImageServiceRest(imageService: ActorRef, implicit val imageServiceTimeout:
     path("image" / """[^/]+""".r ~ Slash.?) { tag =>
       (put & requestEntityPresent & entity(as[Array[Byte]])) { image =>
         onSuccess (imageService ? SubmitImage(image, tag)) {  // This detaches to an asynchronous call
-          case ImageSubmissionOK => complete(StatusCodes.OK)
+          case ImageSubmissionOK => complete(StatusCodes.Created)
           case InvalidSubmittedImage => complete(StatusCodes.BadRequest)
         }
       } ~
-      get {
-        extractImageAttributes { requestedImageAttributes =>
-          onSuccess(imageService ? RequestImageUrl(tag, requestedImageAttributes.toImageAttributes)) {
-            case RequestedImageNotFound => complete(StatusCodes.NotFound, "Requested image not found")
-            case RequestedImageUrl(url) => complete(StatusCodes.OK, url)
-          }
+      (get & extractImageAttributes) { requestedImageAttributes =>
+        onSuccess(imageService ? RequestImageUrl(tag, requestedImageAttributes.toImageAttributes)) {
+          case RequestedImageNotFound => complete(StatusCodes.NotFound, "Requested image not found")
+          case RequestedImageUrl(url) => complete(StatusCodes.OK, url)
         }
       }
     }
