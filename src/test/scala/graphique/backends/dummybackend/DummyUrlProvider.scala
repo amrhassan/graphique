@@ -21,25 +21,36 @@ object DummyUrlProvider extends UrlProvider {
 
   object DummyHandler extends HttpHandler {
     def handle(exchange: HttpExchange): Unit = {
-      val id = exchange.getAttribute("id").asInstanceOf[String]
-      val path = Paths.get(id)
+      val urlComponent = exchange.getRequestURI.getPath.substring(1)
+      val UrlComponentPattern = """image/([^-]+).*""".r
 
-      if (!(DummyIO exists path))
+      val tag = urlComponent match {
+        case UrlComponentPattern(t) => t
+      }
+
+      if (!(DummyIO exists (DummyPaths ofRawImage tag))) {
         exchange.sendResponseHeaders(404, 0)
+        exchange.close()
+        return
+      }
 
-      val imageContent = DummyIO.read(Paths.get(id))
-      exchange.getResponseHeaders.add("Content-Type", Content.detectMimeType(imageContent).get)
-      exchange.sendResponseHeaders(200, imageContent.length)
-
-      exchange.getResponseBody.write(imageContent)
-      exchange.close()
+      try {
+        val imageContent = DummyIO.read(Paths.get(urlComponent))
+        exchange.getResponseHeaders.add("Content-Type", Content.detectMimeType(imageContent).get)
+        exchange.sendResponseHeaders(200, imageContent.length)
+        val body = exchange.getResponseBody
+        body.write(imageContent)
+        body.close()
+      } catch {
+        case e: Throwable => print(e)
+      }
     }
   }
 
   def forRequestedImage(requestedImage: RequestedImage): Option[String] = {
     val path = DummyPaths ofImage requestedImage
     if (DummyIO exists path)
-      Some(s"http://localhost:$Port/?id=$path")
+      Some(s"http://localhost:$Port/$path")
     else
       None
   }

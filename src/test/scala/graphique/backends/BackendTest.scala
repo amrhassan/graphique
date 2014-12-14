@@ -22,7 +22,10 @@ class BackendTest extends TestSpec {
   }
 
   it should "have a URL for a submitted image" in {
-    backend imageUrlFor("like_a_sir", ImageAttributes.originalImage) should not be None
+    val image = readResource("like_a_sir.jpg")
+    backend submitImage("like_a_sir", image)
+    val url = backend imageUrlFor("like_a_sir", ImageAttributes.originalImage)
+    url should not be None
   }
 
   it should "not have a URL for an unsubmitted image" in {
