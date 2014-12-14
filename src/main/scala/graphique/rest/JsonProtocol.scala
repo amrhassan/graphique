@@ -1,6 +1,7 @@
 package graphique.rest
 
-import graphique.service.GraphiqueService.RequestedImageUrl
+import graphique.GraphiqueService
+import GraphiqueService.RequestedImageUrl
 import spray.json.DefaultJsonProtocol
 
 object JsonProtocol extends DefaultJsonProtocol {

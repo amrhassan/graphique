@@ -1,18 +1,17 @@
-package graphique.service
+package graphique
 
 import akka.actor.{Actor, ActorLogging}
 import graphique.backends.Backend
-import graphique.images
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 /**
  * The entry point to the Graphique microservice.
  */
 class GraphiqueService(backend: Backend) extends Actor with ActorLogging {
 
-  import graphique.service.GraphiqueService._
+  import GraphiqueService._
 
   override final def receive: Receive = {
 
