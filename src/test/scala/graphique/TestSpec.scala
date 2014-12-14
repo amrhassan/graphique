@@ -4,12 +4,12 @@ import java.io.File
 import java.nio.file.Files
 
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.{BeforeAndAfterAll, FunSuiteLike}
+import org.scalatest._
 
 /**
  * Base trait for unit tests.
  */
-trait TestSpec extends FunSuiteLike with BeforeAndAfterAll with MockFactory {
+trait TestSpec extends FlatSpecLike with ShouldMatchers with BeforeAndAfterAll with MockFactory {
 
   /**
    * Reads resource file content and returns it.

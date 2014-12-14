@@ -6,8 +6,6 @@ import akka.util.Timeout
 import graphique.images._
 import spray.http.StatusCodes
 import spray.routing.Route
-
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -15,7 +13,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
  */
 class ImageServiceRest(imageService: ActorRef, implicit val imageServiceTimeout: Timeout) extends HttpServiceListener {
 
-  import graphique.service.ImageService._
+  import graphique.service.GraphiqueService._
 
   import spray.httpx.SprayJsonSupport.sprayJsonMarshaller
   import JsonProtocol._

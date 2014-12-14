@@ -1,17 +1,17 @@
 package graphique.backends
 
+import graphique.images
 import graphique.images.ImageProcessor
 
 /**
  * The manager of processed and servable images
  */
-trait ImageManager {
-
-  def cache: RequestedImageCache
+class ImageManager(val cache: RequestedImageCache, val urlProvider: UrlProvider) {
 
   private val imageProcessor = new ImageProcessor
 
-  def urlScheme: UrlProvider
+  case class ImageProcessingError(imageTag: String, desiredAttributes: images.ImageAttributes, cause: Throwable)
+    extends RuntimeException(s"Failed while processing the image for $imageTag: $desiredAttributes", cause)
 
   /**
    * Provide a servable URL for the requested image.
@@ -42,6 +42,6 @@ trait ImageManager {
     if (!cache.has(request))
       processRequestedImageIntoCache
 
-    urlScheme.forRequestedImage(request)
+    urlProvider.forRequestedImage(request)
   }
 }

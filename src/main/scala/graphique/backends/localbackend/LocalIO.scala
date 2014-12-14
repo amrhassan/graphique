@@ -3,24 +3,16 @@ package graphique.backends.localbackend
 import java.io.IOException
 import java.nio.file._
 
-import net.sf.jmimemagic.{MagicException, MagicMatchNotFoundException, MagicParseException, Magic}
+import graphique.backends.IO
 
 /**
- * Low-level IO operations.
+ * IO implementation that stores uses the local filesystem for storage.
  */
-class LocalIO {
+private[localbackend] class LocalIO extends IO {
 
   import graphique.backends._
 
-  /**
-   * Writes the raw data to the local file destination. If the file destination
-   * is in a non-existing directory, all the leading directories will be created first.
-   *
-   * @param data raw data
-   * @param dest file destination
-   * @throws IOError
-   */
-  def writeData(data: Array[Byte], dest: Path): Unit = {
+  def write(dest: Path)(data: Array[Byte]): Unit = {
     val parent = dest.getParent
 
     try {
@@ -32,12 +24,6 @@ class LocalIO {
     }
   }
 
-  /**
-   * Checks whether a local filesystem path points to an existing file.
-   *
-   * @param path the file path
-   * @return the existence condition
-   */
   def exists(path: Path): Boolean = Files.exists(path)
 
   /**
@@ -46,7 +32,7 @@ class LocalIO {
    * @param directory the directory path
    * @throws IOError
    */
-  def createDirectories(directory: Path): Unit = {
+  private def createDirectories(directory: Path): Unit = {
     try {
       Files.createDirectories(directory)
     } catch {
@@ -55,49 +41,21 @@ class LocalIO {
     }
   }
 
-  /**
-   * Reads and returns all the bytes from the file pointed to by the given path.
-   *
-   * @throws IOError
-   */
-  def readData(path: Path): Array[Byte] =
+  def read(path: Path): Array[Byte] =
     try {
       Files.readAllBytes(path)
     } catch {
       case e: IOException => throw new IOError(e)
     }
 
-  /**
-   * Delete files matched by the given glob in the given directory path, if any existed.
-   *
-   * Example:
-   *  deleteFiles(Paths.get("/home/amr/files), "log-*")
-   *
-   * @param directory
-   * @param glob
-   * @throws IOError
-   */
-  def deleteFiles(directory: Path, glob: String): Unit = {
+  def delete(directory: Path, prefix: String): Unit = {
     try {
       import scala.collection.JavaConversions._
-      Files.newDirectoryStream(directory, glob) foreach Files.delete
+      Files.newDirectoryStream(directory, s"$prefix*") foreach Files.delete
     } catch {
       case _: NoSuchFileException => ()
       case _: NotDirectoryException => ()
       case e: IOException => throw new IOError(e)
     }
   }
-
-  /**
-   * Detects the mime type of data, if possible.
-   */
-  def detectMimeType(data: Array[Byte]): Option[String] =
-    try {
-      Some(Magic.getMagicMatch(data).getMimeType)
-    } catch {
-      case _: MagicParseException => None
-      case _: MagicMatchNotFoundException => None
-      case _: MagicException => None
-    }
-
 }

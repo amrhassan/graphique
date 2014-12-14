@@ -1,9 +1,8 @@
 package graphique.service
 
 import akka.actor.{Actor, ActorLogging}
-import graphique.backends.{ImageManager, RawImageManager, RequestedImage}
+import graphique.backends.Backend
 import graphique.images
-import graphique.images.ImageValidator
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -11,11 +10,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /**
  * The entry point to the Graphique microservice.
  */
-class ImageService(rawImages: RawImageManager, images: ImageManager) extends Actor with ActorLogging {
+class GraphiqueService(backend: Backend) extends Actor with ActorLogging {
 
-  import graphique.service.ImageService._
-
-  private val imageValidator = new ImageValidator
+  import graphique.service.GraphiqueService._
 
   override final def receive: Receive = {
 
@@ -25,12 +22,11 @@ class ImageService(rawImages: RawImageManager, images: ImageManager) extends Act
       Future {
         log info s"Submitting an ${image.length}B image with the tag: $tag"
 
-        if (imageValidator isValid image) {
-          images.cache clearTaggedWith tag
-          rawImages store(tag, image)
+        try {
+          backend submitImage(tag, image)
           originalSender ! ImageSubmissionOK
-        } else {
-          originalSender ! InvalidSubmittedImage
+        } catch {
+          case e: Backend.InvalidImageError => originalSender ! InvalidSubmittedImage
         }
       }
 
@@ -39,7 +35,7 @@ class ImageService(rawImages: RawImageManager, images: ImageManager) extends Act
 
       Future {
         log info s"Requesting the image $tag with attributes $attributes"
-        val urlOption = images imageUrl(RequestedImage(tag, attributes), rawImages read tag)
+        val urlOption = backend imageUrlFor(tag, attributes)
         urlOption match {
           case Some(url) => originalSender ! RequestedImageUrl(url)
           case None => originalSender ! RequestedImageNotFound
@@ -48,7 +44,7 @@ class ImageService(rawImages: RawImageManager, images: ImageManager) extends Act
   }
 }
 
-object ImageService {
+object GraphiqueService {
 
   /**
    * Submit an image.
