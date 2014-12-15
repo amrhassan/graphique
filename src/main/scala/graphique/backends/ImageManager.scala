@@ -26,22 +26,25 @@ class ImageManager(val cache: RequestedImageCache, val urlProvider: UrlProvider)
    */
   def imageUrl(request: RequestedImage, rawImage: => Option[Array[Byte]]): Option[String] = {
 
-    def processRequestedImageIntoCache: Unit = {
-
-      rawImage foreach { rawImage =>
-
-        val errorOrImage = imageProcessor.process(rawImage, request.attributes)
-
+    def processRequestedImageIntoCache: Option[ImageId] = {
+      rawImage map { rawImageBytes =>
+        val errorOrImage = imageProcessor.process(rawImageBytes, request.attributes)
         errorOrImage match {
-          case Right(processedImage) => cache.store(request, processedImage)
+          case Right(processedImage) => {
+            val fileNameExtension = (Content detectFileNameExtension processedImage).getOrElse("")
+            val imageId = s"${request.tag}-${Paths hashImageAttributes request.attributes}$fileNameExtension"
+            cache.store(imageId, processedImage)
+            imageId
+          }
           case Left(error) => throw ImageProcessingError(request.tag, request.attributes, error)
         }
       }
     }
 
-    if (!cache.has(request))
-      processRequestedImageIntoCache
-
-    urlProvider.forRequestedImage(request)
+    val availableImages = cache.availableImages(request)
+    if (!availableImages.isEmpty)
+      Some(urlProvider forImage availableImages.head)
+    else
+      processRequestedImageIntoCache map urlProvider.forImage
   }
 }

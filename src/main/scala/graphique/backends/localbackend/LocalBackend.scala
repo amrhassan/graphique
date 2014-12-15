@@ -30,7 +30,7 @@ object LocalBackend {
     val io = new LocalIO
 
     val requestedImageCache = new RequestedImageCache(io, filePaths)
-    val urlProvider = new LocalUrlProvider(httpPort, filePaths, io)
+    val urlProvider = new LocalUrlProvider(httpPort, filePaths)
 
     val rawImages = new RawImageManager(filePaths, io)
     val images = new ImageManager(requestedImageCache, urlProvider)

@@ -5,7 +5,7 @@ import javax.imageio.ImageIO
 
 import com.mashape.unirest.http.Unirest
 import graphique.TestSpec
-import graphique.backends.dummybackend.{DummyBackend, DummyUrlProvider, DummyPaths, DummyIO}
+import graphique.backends.dummybackend.DummyBackend
 import graphique.images.{Dimensions, PNGFormat, JPEGFormat, ImageAttributes}
 
 

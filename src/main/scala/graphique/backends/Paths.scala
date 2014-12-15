@@ -17,15 +17,20 @@ class Paths(val rawImagePath: Path, val imagePath: Path) {
    *
    * @param tag the identifier tag of the image
    */
-  def ofRawImage(tag: String): Path = rawImagePath resolve tag
+  def ofRawImage(tag: ImageTag): Path = rawImagePath resolve tag
 
   /**
    * The path to the image.
    *
    * This is where the raw image after processing should be cached to.
    */
-  def ofImage(requestedImage: RequestedImage): Path =
-    imagePath resolve (requestedImage.tag + "-" + hashImageAttributes(requestedImage.attributes))
+  def ofImage(id: ImageId): Path = imagePath resolve id
+
+  private val possibleImageFileNameExtensions = Set(".jpg", ".png")
+
+  def possibleImageIds(requestedImage: RequestedImage): Set[ImageId] =
+    for (extension <- possibleImageFileNameExtensions)
+      yield s"${requestedImage.tag}-${hashImageAttributes(requestedImage.attributes)}$extension"
 
   /**
    * The scheme in which the given image is stored in the cache.

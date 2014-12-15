@@ -24,28 +24,12 @@ class PathsTest extends UnitSpec {
 
   it should "be consistent path of images" in {
 
-    val randomTag = RandomStringUtils.randomAlphanumeric(20)
-    val attributes = images.ImageAttributes.originalImage.resizedTo(Dimensions(42, 22)).transcodedTo(JPEGFormat(0.3))
+    val imageId = RandomStringUtils.randomAlphanumeric(20)
+    val path = paths ofImage imageId
 
-    val path = paths ofImage RequestedImage(randomTag, attributes)
+    val newId = imageId + ""
+    imageId should not be theSameElementsAs(newId)
 
-    val newTag = randomTag + ""
-    newTag should not be theSameElementsAs(randomTag)
-
-    val newAttributes = attributes.copy()
-    attributes should not be theSameInstanceAs(newAttributes)
-
-    (paths ofImage RequestedImage(newTag, newAttributes)) should be (path)
-  }
-
-  it should "differentiate the paths of images with different attributes" in {
-
-    val randomTag = RandomStringUtils.randomAlphanumeric(20)
-    val attributes = images.ImageAttributes.originalImage.resizedTo(Dimensions(42, 22)).transcodedTo(PNGFormat)
-    val differentAttributes = attributes.transcodedTo(JPEGFormat(0.3))
-
-    val path = paths ofImage RequestedImage(randomTag, attributes)
-
-    assert(path !== (paths ofImage RequestedImage(randomTag, differentAttributes)))
+    (paths ofImage newId) should be (path)
   }
 }

@@ -12,7 +12,7 @@ object DummyBackend {
 
   def apply(): DummyBackend = {
     val io = new DummyIO
-    val urls = new DummyUrlProvider(io)
+    val urls = new DummyUrlProvider(io, DummyPaths)
     val requestedImageCache = new RequestedImageCache(io, DummyPaths)
     val rawImages = new RawImageManager(DummyPaths, io)
     val images = new ImageManager(requestedImageCache, urls)
