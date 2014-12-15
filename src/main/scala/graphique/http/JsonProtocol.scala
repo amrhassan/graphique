@@ -1,4 +1,4 @@
-package graphique.rest
+package graphique.http
 
 import graphique.GraphiqueService
 import GraphiqueService.RequestedImageUrl

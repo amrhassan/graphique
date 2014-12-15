@@ -1,4 +1,4 @@
-package graphique.rest
+package graphique.http
 
 import akka.actor.ActorRef
 import akka.pattern.ask
@@ -12,7 +12,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /**
  * The REST interface to the ImageService actor.
  */
-class ImageServiceRest(imageService: ActorRef, implicit val imageServiceTimeout: Timeout) extends HttpServiceListener {
+class GraphiqueRest(imageService: ActorRef, implicit val imageServiceTimeout: Timeout) extends HttpServiceListener {
 
   import GraphiqueService._
 

@@ -1,4 +1,4 @@
-package graphique.rest
+package graphique.http
 
 import akka.actor.ActorLogging
 import spray.routing._
