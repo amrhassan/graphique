@@ -3,14 +3,14 @@
 
 # Graphique #
 
-An image management [microservice](http://microservices.io/patterns/microservices.html).
+A high-performance image management [microservice](http://microservices.io/patterns/microservices.html) written using the awesomeness of Scala/Akka and Spray.
 
 It is built to handle:
-* the low level book keeping of where the image files are stored
+* the low level book keeping of storing the actual image files
 * the generation and caching of image thumbnails in arbitrary sizes and formats
-* serving the images over HTTP
+* generating URLs for the managed images that are servable over HTTP
 
-It exposes its functionality through REST APIs.
+It exposes its functionality through a RESTful APIs.
 
 Dependencies
 ============
