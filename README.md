@@ -3,7 +3,7 @@
 
 # Graphique #
 
-A high-performance image management [microservice](http://microservices.io/patterns/microservices.html) written using the awesomeness of Scala/Akka and Spray.
+An image management [microservice](http://microservices.io/patterns/microservices.html) written using the awesomeness of Scala, [Akka](http://akka.io/), [Spray](http://spray.io/) and [Thumbnailator](https://code.google.com/p/thumbnailator/).
 
 It is built to handle:
 * the low level book keeping of storing the actual image files
