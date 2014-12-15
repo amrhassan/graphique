@@ -18,10 +18,10 @@ package graphique.images
  *                       |- OriginalFormat
  *                       |- TranscodedFormat(imageFormat)
  */
-private[images] class ImageAttribute
+class ImageAttribute
 
 
-private[images] object ImageAttribute {
+object ImageAttribute {
 
   /**
    * The output format of an image.

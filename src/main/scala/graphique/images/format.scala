@@ -1,7 +1,9 @@
 
 package graphique.images
 
-sealed trait ImageFormat
+sealed trait ImageFormat {
+  def fileNameExtension: String
+}
 
 /**
  * The JPEG image format.
@@ -10,9 +12,13 @@ sealed trait ImageFormat
  */
 case class JPEGFormat(quality: Double = 0.95) extends ImageFormat {
   require(quality >= 0 && quality <= 1.0)
+
+  val fileNameExtension = ".jpg"
 }
 
 /**
  * The PNG image format.
  */
-case object PNGFormat extends ImageFormat
+case object PNGFormat extends ImageFormat {
+  val fileNameExtension = ".png"
+}
