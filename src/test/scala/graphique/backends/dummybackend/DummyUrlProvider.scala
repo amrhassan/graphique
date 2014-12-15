@@ -5,18 +5,20 @@ import java.nio.file.Paths
 import java.util.concurrent.Executors
 
 import com.sun.net.httpserver.{HttpExchange, HttpHandler, HttpServer}
-import graphique.backends.{Content, RequestedImage, UrlProvider}
+import graphique.backends.{IO, Content, RequestedImage, UrlProvider}
+
+import scala.util.Random
 
 /**
  * A fully-functional dummy implementation of UrlProvider for testing.
  */
-object DummyUrlProvider extends UrlProvider {
+class DummyUrlProvider(io: IO) extends UrlProvider {
 
-  val Port = 8192
+  val Port = Random.shuffle(8000 to 8999).head
 
   val httpServer = HttpServer.create(new InetSocketAddress(Port), 0)
   httpServer createContext("/", DummyHandler)
-  httpServer setExecutor Executors.newFixedThreadPool(5)
+  httpServer setExecutor Executors.newFixedThreadPool(1)
   httpServer.start()
 
   object DummyHandler extends HttpHandler {
@@ -28,14 +30,14 @@ object DummyUrlProvider extends UrlProvider {
         case UrlComponentPattern(t) => t
       }
 
-      if (!(DummyIO exists (DummyPaths ofRawImage tag))) {
+      if (!(io exists (DummyPaths ofRawImage tag))) {
         exchange.sendResponseHeaders(404, 0)
         exchange.close()
         return
       }
 
       try {
-        val imageContent = DummyIO.read(Paths.get(urlComponent))
+        val imageContent = io read Paths.get(urlComponent)
         exchange.getResponseHeaders.add("Content-Type", Content.detectMimeType(imageContent).get)
         exchange.sendResponseHeaders(200, imageContent.length)
         val body = exchange.getResponseBody
@@ -49,7 +51,7 @@ object DummyUrlProvider extends UrlProvider {
 
   def forRequestedImage(requestedImage: RequestedImage): Option[String] = {
     val path = DummyPaths ofImage requestedImage
-    if (DummyIO exists path)
+    if (io exists path)
       Some(s"http://localhost:$Port/$path")
     else
       None

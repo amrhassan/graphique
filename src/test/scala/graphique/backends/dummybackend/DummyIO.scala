@@ -7,7 +7,7 @@ import scala.collection.mutable
 /**
  * A fully-functional dummy IO implementation for testing.
  */
-object DummyIO extends IO {
+class DummyIO extends IO {
 
   var data = mutable.Map.empty[file.Path, Array[Byte]]
 

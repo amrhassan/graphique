@@ -40,6 +40,8 @@ class Backend(rawImages: RawImageManager, images: ImageManager) {
   def imageUrlFor(tag: String, attributes: ImageAttributes): Option[String] = {
     images imageUrl(RequestedImage(tag, attributes), rawImages read tag)
   }
+
+  def imageUrlFor(tag: String): Option[String] = imageUrlFor(tag, ImageAttributes.originalImage)
 }
 
 object Backend {

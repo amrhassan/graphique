@@ -19,5 +19,6 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-s3" % "1.9.10",
   "org.scalatest" %% "scalatest" % "2.2.1" % "test",
   "org.scalamock" %% "scalamock-scalatest-support" % "3.2" % "test",
-  "org.apache.commons" % "commons-lang3" % "3.3.2" % "test"
+  "org.apache.commons" % "commons-lang3" % "3.3.2" % "test",
+  "com.mashape.unirest" % "unirest-java" % "1.3.27" % "test"
 )

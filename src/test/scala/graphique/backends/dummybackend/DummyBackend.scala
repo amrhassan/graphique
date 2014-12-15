@@ -11,9 +11,11 @@ class DummyBackend private(rawImages: RawImageManager, images: ImageManager)
 object DummyBackend {
 
   def apply(): DummyBackend = {
-    val requestedImageCache = new RequestedImageCache(DummyIO, DummyPaths)
-    val rawImages = new RawImageManager(DummyPaths, DummyIO)
-    val images = new ImageManager(requestedImageCache, DummyUrlProvider)
+    val io = new DummyIO
+    val urls = new DummyUrlProvider(io)
+    val requestedImageCache = new RequestedImageCache(io, DummyPaths)
+    val rawImages = new RawImageManager(DummyPaths, io)
+    val images = new ImageManager(requestedImageCache, urls)
 
     new DummyBackend(rawImages, images)
   }
