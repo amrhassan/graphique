@@ -8,9 +8,9 @@ import spray.routing.directives.ContentTypeResolver
 
 class ImageServer(imagePath: Path) extends HttpServiceListener {
   
-  implicit val resolver: ContentTypeResolver = new MimeContentTypeResolver(imagePath)
+  implicit val resolver: ContentTypeResolver = new MimeMagicOrExtensionContentTypeResolver(imagePath)
   
   def route: Route = {
-    getFromBrowseableDirectory(imagePath.toString)
+    getFromDirectory(imagePath.toString)
   }
 }

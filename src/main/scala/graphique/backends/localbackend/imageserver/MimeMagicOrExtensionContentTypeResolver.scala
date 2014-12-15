@@ -10,7 +10,7 @@ import spray.routing.directives.ContentTypeResolver
 
 import scala.io.{Codec, Source}
 
-class MimeContentTypeResolver(directory: Path) extends ContentTypeResolver {
+class MimeMagicOrExtensionContentTypeResolver(directory: Path) extends ContentTypeResolver {
 
   val fallback: ContentTypeResolver = ContentTypeResolver.Default
 
