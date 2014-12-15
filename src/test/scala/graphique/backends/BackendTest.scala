@@ -8,7 +8,6 @@ import graphique.TestSpec
 import graphique.backends.dummybackend.{DummyBackend, DummyUrlProvider, DummyPaths, DummyIO}
 import graphique.images.{Dimensions, PNGFormat, JPEGFormat, ImageAttributes}
 
-import scala.io.{Codec, Source}
 
 class BackendTest extends TestSpec {
 
@@ -17,7 +16,7 @@ class BackendTest extends TestSpec {
    */
   def withBackend(test: Backend => Unit) = test(DummyBackend())
 
-  "Backend" should "reject corrupted image" in {
+  "A Backend" should "reject corrupted image" in {
     withBackend { backend =>
       intercept[Backend.InvalidImageError] {
         val image = readResource("invalid_image.jpg")
