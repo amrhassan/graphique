@@ -1,6 +1,7 @@
 package graphique.backends.dummybackend
 
-import java.net.InetSocketAddress
+import java.io.{IOException, IOError}
+import java.net.{ServerSocket, InetSocketAddress}
 import java.nio.file.Paths
 import java.util.concurrent.Executors
 
@@ -14,7 +15,20 @@ import scala.util.Random
  */
 class DummyUrlProvider(io: IO) extends UrlProvider {
 
-  val Port = Random.shuffle(8000 to 8999).head
+  val Port = {
+    val possible = Random.shuffle(8000 to 8999).toStream
+    val available = possible filter { port =>
+      try {
+        val server = Option(new ServerSocket(port))
+        server foreach (_.close())
+        true
+      } catch {
+        case e: IOException => false
+        case e: Throwable => e.printStackTrace() ; false
+      }
+    }
+    available.head
+  }
 
   val httpServer = HttpServer.create(new InetSocketAddress(Port), 0)
   httpServer createContext("/", DummyHandler)
