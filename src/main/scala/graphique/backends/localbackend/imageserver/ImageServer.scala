@@ -6,7 +6,7 @@ import graphique.http.HttpServiceListener
 import spray.routing.Route
 import spray.routing.directives.ContentTypeResolver
 
-class ImageServer(imagePath: Path) extends HttpServiceListener {
+private[localbackend] class ImageServer(imagePath: Path) extends HttpServiceListener {
   
   implicit val resolver: ContentTypeResolver = new MimeMagicOrExtensionContentTypeResolver(imagePath)
   

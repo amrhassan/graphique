@@ -6,7 +6,9 @@ import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.io.IO
 import spray.can.Http
 
-private[localbackend] class ImageServerManager(port: Int, imagePath: Path) extends Actor with ActorLogging {
+private[localbackend] class ImageServerManager(hostname: String, port: Int, imagePath: Path)
+  extends Actor with ActorLogging {
+
   require(port >= 0)
 
   import graphique.backends.localbackend.imageserver.ImageServerManager._
@@ -26,7 +28,7 @@ private[localbackend] class ImageServerManager(port: Int, imagePath: Path) exten
       // Create a new managed ImageServer instance
       sprayCanHttpListener = None
       imageServer = Some(context actorOf(Props(new ImageServer(imagePath)), "Listener"))
-      IO(Http)(context.system) ! Http.Bind(imageServer.get, interface = "localhost", port = port)
+      IO(Http)(context.system) ! Http.Bind(imageServer.get, interface = hostname, port = port)
 
     case Stop =>
       IO(Http)(context.system) ! Http.Unbind

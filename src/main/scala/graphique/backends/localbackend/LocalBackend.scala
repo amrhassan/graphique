@@ -21,16 +21,17 @@ object LocalBackend {
    * A factory method for a LocalBackend.
    *
    * @param storageLocation the location where the submitted images are stored
+   * @param hostname
    * @param httpPort the port on which the internal HTTP server will listen to
    */
-  def apply(storageLocation: Path, httpPort: Int): LocalBackend = {
+  def apply(storageLocation: Path, hostname: String, httpPort: Int): LocalBackend = {
     require(httpPort > 0, "httpPort must be a non negative number")
 
     val filePaths = new FilePaths(storageLocation)
     val io = new LocalIO
 
     val requestedImageCache = new RequestedImageCache(io, filePaths)
-    val urlProvider = new LocalUrlProvider(httpPort, filePaths)
+    val urlProvider = new LocalUrlProvider(hostname, httpPort, filePaths)
 
     val rawImages = new RawImageManager(filePaths, io)
     val images = new ImageManager(requestedImageCache, urlProvider)
