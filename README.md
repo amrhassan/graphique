@@ -16,7 +16,11 @@ Dependencies
 ============
 * `sbt (=> 0.13.7)`
 
-Runnint It
-===========
+Running
+=======
 1. `cd` into the directory where the the project is
 2. `sbt run`
+
+Configuration
+=============
+Graphique uses the XDG BaseDirectory specification for looking up configuration files named `graphique/application.conf`. The configuration files are written in the [HOCON syntax](https://github.com/typesafehub/config/blob/master/HOCON.md). You can override any of the specified config parameters from the internal [configuration file](/src/main/resources/application.conf).
