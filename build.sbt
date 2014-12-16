@@ -7,6 +7,7 @@ val akkaVersion = "2.3.7"
 val sprayVersion = "1.3.2"
 
 libraryDependencies ++= Seq(
+  "com.typesafe" % "config" % "1.2.1",
   "net.coobird" % "thumbnailator" % "0.4.7",
   "commons-codec" % "commons-codec" % "1.10",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
