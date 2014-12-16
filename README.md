@@ -14,9 +14,9 @@ It exposes its functionality through a RESTful APIs.
 
 Dependencies
 ============
-* Scala (=> 2.11.4)
-* SBT (=> 0.13)
+* `sbt (=> 0.13.7)`
 
-Installation
-============
-*TODO*
+Runnint It
+===========
+1. `cd` into the directory where the the project is
+2. `sbt run`
