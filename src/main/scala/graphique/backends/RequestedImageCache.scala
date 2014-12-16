@@ -12,9 +12,9 @@ class RequestedImageCache(io: IO, paths: Paths) {
   /**
    * Returns the set of image IDs available for the requested images.
    */
-  def availableImages(requestedImage: RequestedImage): Set[ImageId] = {
+  def availableImages(requestedImage: RequestedImage): Traversable[ImageId] = {
     val possiblePaths = (paths possibleImageIds requestedImage) map { id => paths ofImage id }
-    val availablePaths = possiblePaths filter io.exists
+    val availablePaths = possiblePaths.toStream filter io.exists
     availablePaths map { path =>
       path.getFileName.toString
     }
