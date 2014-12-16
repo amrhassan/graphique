@@ -32,11 +32,9 @@ libraryDependencies ++= Seq(
 )
 
 assemblyMergeStrategy in assembly := {
-
   // A conflict between Xerces jars *sigh*
   case "org/w3c/dom/html/HTMLDOMImplementation.class" =>
     MergeStrategy.first
-
   case x =>
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(x)
