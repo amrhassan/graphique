@@ -16,9 +16,7 @@ import scala.util.Try
  */
 private[s3backend] class S3IO(accessKey: String, secretKey: String, bucket: String) extends IO with LazyLogging {
 
-  private lazy val s3Client = new AmazonS3Client(new BasicAWSCredentials(accessKey, secretKey))
-
-  def withFreshS3Client[T](fun: AmazonS3Client => T) = {
+  def withS3Client[T](fun: AmazonS3Client => T) = {
     val client = new AmazonS3Client(new BasicAWSCredentials(accessKey, secretKey))
     val returned = fun(client)
     client.shutdown()
@@ -27,7 +25,7 @@ private[s3backend] class S3IO(accessKey: String, secretKey: String, bucket: Stri
 
   def write(dest: Path)(data: Array[Byte]): Unit = {
     logger debug "WRITE"
-    withFreshS3Client { client =>
+    withS3Client { client =>
       val request = new PutObjectRequest(bucket, dest.toString, new ByteArrayInputStream(data), metadataFor(data))
       request.setCannedAcl(CannedAccessControlList.PublicRead)
       client.putObject(request)
@@ -45,25 +43,29 @@ private[s3backend] class S3IO(accessKey: String, secretKey: String, bucket: Stri
 
   def delete(directory: Path, prefix: String): Unit = {
     logger debug "DELETE"
-    import scala.collection.JavaConversions._
-    val files = s3Client listObjects(bucket, prefix)
-    files.getObjectSummaries foreach { objectSummary =>
-      s3Client deleteObject(bucket, objectSummary.getKey)
+    withS3Client { s3Client =>
+      import scala.collection.JavaConversions._
+      val files = s3Client listObjects(bucket, prefix)
+      files.getObjectSummaries foreach { objectSummary =>
+        s3Client deleteObject(bucket, objectSummary.getKey)
+      }
     }
   }
 
   def exists(path: Path): Boolean = {
     logger debug "EXISTS"
-    try {
-      Option(s3Client getObject(bucket, path.toString)).isDefined
-    } catch {
-      case e: AmazonServiceException => if (e.getErrorCode == "NoSuchKey") false else throw e
+    withS3Client { s3Client =>
+      try {
+        Option(s3Client getObject(bucket, path.toString)).isDefined
+      } catch {
+        case e: AmazonServiceException => if (e.getErrorCode == "NoSuchKey") false else throw e
+      }
     }
   }
 
   def read(path: Path): Array[Byte] = {
     logger debug "READ"
-    withFreshS3Client { client =>
+    withS3Client { client =>
       val s3Object = client.getObject(bucket, path.toString)
       val inStream = s3Object.getObjectContent
       val source = Source.fromInputStream(inStream)(Codec.ISO8859)
