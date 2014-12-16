@@ -3,11 +3,7 @@ package graphique
 import java.nio.file.{Path, Paths}
 import com.typesafe.config.{ConfigFactory, Config}
 
-/**
- * Load configuration parameters from `application.conf` files in directories and order described
- * by the XDG BaseDirectory specification, merged with the configuration parameters acquired via
- * the regular `com.typesafe.config.ConfigFactory`.
- */
+
 object XdgConfigFactory {
 
   private val ApplicationName = "graphique"
@@ -37,5 +33,10 @@ object XdgConfigFactory {
     mergeFrom(xdgConfigDirs.split(":").toList map (Paths.get(_)), ConfigFactory.empty())
   }
 
+  /**
+   * Loads configuration parameters from `application.conf` files in directories and order described
+   * by the XDG BaseDirectory specification, merged with the configuration parameters acquired via
+   * the regular `com.typesafe.config.ConfigFactory` as a fallback.
+   */
   def load(): Config = (userLevelConfig withFallback systemLevelConfig) withFallback applicationLevelConfig
 }
