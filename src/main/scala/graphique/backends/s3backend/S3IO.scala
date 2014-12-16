@@ -5,7 +5,7 @@ import java.nio.file.Path
 import com.amazonaws.AmazonServiceException
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.services.s3.AmazonS3Client
-import com.amazonaws.services.s3.model.{CannedAccessControlList, ObjectMetadata}
+import com.amazonaws.services.s3.model.{PutObjectRequest, CannedAccessControlList, ObjectMetadata}
 import graphique.backends.{Content, IO}
 import scala.io.{Codec, Source}
 import scala.util.Try
@@ -18,8 +18,9 @@ private[s3backend] class S3IO(accessKey: String, secretKey: String, bucket: Stri
   private lazy val s3Client = new AmazonS3Client(new BasicAWSCredentials(accessKey, secretKey))
 
   def write(dest: Path)(data: Array[Byte]): Unit = {
-    s3Client putObject(bucket, dest.toString, new ByteArrayInputStream(data), metadataFor(data))
-    s3Client setObjectAcl(bucket, dest.toString, CannedAccessControlList.PublicRead)
+    val request = new PutObjectRequest(bucket, dest.toString, new ByteArrayInputStream(data), metadataFor(data))
+    request.setCannedAcl(CannedAccessControlList.PublicRead)
+    s3Client.putObject(request)
   }
 
   private def metadataFor(data: Array[Byte]): ObjectMetadata = {
