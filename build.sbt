@@ -1,6 +1,10 @@
 
 name := "graphique"
 
+version := "1-SNAPSHOT"
+
+organization := "graphique"
+
 scalaVersion := "2.11.4"
 
 val akkaVersion = "2.3.7"
@@ -26,3 +30,14 @@ libraryDependencies ++= Seq(
   "org.apache.commons" % "commons-lang3" % "3.3.2" % "test",
   "com.mashape.unirest" % "unirest-java" % "1.3.27" % "test"
 )
+
+assemblyMergeStrategy in assembly := {
+
+  // A conflict between Xerces jars *sigh*
+  case "org/w3c/dom/html/HTMLDOMImplementation.class" =>
+    MergeStrategy.first
+
+  case x =>
+    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    oldStrategy(x)
+}

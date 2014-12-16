@@ -1,7 +1,6 @@
 package graphique
 
-import akka.actor.Actor.Receive
-import akka.actor.{ActorLogging, Actor, Props, ActorSystem}
+import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
 import akka.io.IO
 import com.typesafe.scalalogging.Logger
 import graphique.backends.localbackend.LocalBackend
@@ -10,7 +9,7 @@ import graphique.http.GraphiqueRest
 import org.slf4j.LoggerFactory
 import spray.can.Http
 
-object App extends App {
+object Application extends App {
 
   val log = Logger(LoggerFactory.getLogger("App"))
   val config = XdgConfigFactory.load().getConfig("graphique")

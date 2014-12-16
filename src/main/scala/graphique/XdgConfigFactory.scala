@@ -1,7 +1,8 @@
 package graphique
 
 import java.nio.file.{Path, Paths}
-import com.typesafe.config.{ConfigFactory, Config}
+
+import com.typesafe.config.{Config, ConfigFactory}
 
 
 object XdgConfigFactory {
