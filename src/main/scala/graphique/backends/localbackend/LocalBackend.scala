@@ -1,7 +1,8 @@
 package graphique.backends.localbackend
 
-import java.nio.file.Path
+import java.nio.file.{Paths, Path}
 
+import com.typesafe.config.Config
 import graphique.backends.{RequestedImageCache, ImageManager, RawImageManager, Backend}
 
 /**
@@ -21,7 +22,7 @@ object LocalBackend {
    * A factory method for a LocalBackend.
    *
    * @param storageLocation the location where the submitted images are stored
-   * @param hostname
+   * @param hostname the hostname to use in generated servable image URLs
    * @param httpPort the port on which the internal HTTP server will listen to
    */
   def apply(storageLocation: Path, hostname: String, httpPort: Int): LocalBackend = {
@@ -37,5 +38,16 @@ object LocalBackend {
     val images = new ImageManager(requestedImageCache, urlProvider)
 
     new LocalBackend(rawImages, images)
+  }
+
+  /**
+   * A factory method that extracts its parameters from the provide Config.
+   */
+  def apply(config: Config): LocalBackend = {
+    apply(
+      storageLocation = Paths.get(config.getString("storageLocation")),
+      hostname = config.getString("imageHttpHostname"),
+      httpPort = config.getInt("imageHttpPort")
+    )
   }
 }

@@ -1,5 +1,6 @@
 package graphique.backends.s3backend
 
+import com.typesafe.config.Config
 import graphique.backends.{RequestedImageCache, Backend, ImageManager, RawImageManager}
 
 class S3Backend private(rawImages: RawImageManager, images: ImageManager)
@@ -19,4 +20,7 @@ object S3Backend {
 
     new S3Backend(rawImages, images)
   }
+
+  def apply(config: Config): S3Backend =
+    apply(config.getString("accessKey"), config.getString("secretKey"), config.getString("bucket"))
 }
