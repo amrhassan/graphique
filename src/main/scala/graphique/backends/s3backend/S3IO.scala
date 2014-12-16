@@ -18,11 +18,20 @@ private[s3backend] class S3IO(accessKey: String, secretKey: String, bucket: Stri
 
   private lazy val s3Client = new AmazonS3Client(new BasicAWSCredentials(accessKey, secretKey))
 
+  def withFreshS3Client[T](fun: AmazonS3Client => T) = {
+    val client = new AmazonS3Client(new BasicAWSCredentials(accessKey, secretKey))
+    val returned = fun(client)
+    client.shutdown()
+    returned
+  }
+
   def write(dest: Path)(data: Array[Byte]): Unit = {
     logger debug "WRITE"
-    val request = new PutObjectRequest(bucket, dest.toString, new ByteArrayInputStream(data), metadataFor(data))
-    request.setCannedAcl(CannedAccessControlList.PublicRead)
-    s3Client.putObject(request)
+    withFreshS3Client { client =>
+      val request = new PutObjectRequest(bucket, dest.toString, new ByteArrayInputStream(data), metadataFor(data))
+      request.setCannedAcl(CannedAccessControlList.PublicRead)
+      client.putObject(request)
+    }
   }
 
   private def metadataFor(data: Array[Byte]): ObjectMetadata = {
@@ -54,12 +63,14 @@ private[s3backend] class S3IO(accessKey: String, secretKey: String, bucket: Stri
 
   def read(path: Path): Array[Byte] = {
     logger debug "READ"
-    val s3Object = s3Client.getObject(bucket, path.toString)
-    val inStream = s3Object.getObjectContent
-    val source = Source.fromInputStream(inStream)(Codec.ISO8859)
-    val data = (source map (_.toByte)).toArray
-    inStream.close()
-    s3Object.close()
-    data
+    withFreshS3Client { client =>
+      val s3Object = client.getObject(bucket, path.toString)
+      val inStream = s3Object.getObjectContent
+      val source = Source.fromInputStream(inStream)(Codec.ISO8859)
+      val data = (source map (_.toByte)).toArray
+      inStream.close()
+      s3Object.close()
+      data
+    }
   }
 }
