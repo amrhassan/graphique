@@ -54,9 +54,11 @@ private[s3backend] class S3IO(accessKey: String, secretKey: String, bucket: Stri
 
   def read(path: Path): Array[Byte] = {
     logger debug "READ"
-    val s3Object = s3Client getObject(bucket, path.toString)
-    val source = Source.fromInputStream(s3Object.getObjectContent)(Codec.ISO8859)
+    val s3Object = s3Client.getObject(bucket, path.toString)
+    val inStream = s3Object.getObjectContent
+    val source = Source.fromInputStream(inStream)(Codec.ISO8859)
     val data = (source map (_.toByte)).toArray
+    inStream.close()
     s3Object.close()
     data
   }
