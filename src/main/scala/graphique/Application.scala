@@ -6,6 +6,7 @@ import com.typesafe.scalalogging.Logger
 import graphique.backends.localbackend.LocalBackend
 import graphique.backends.s3backend.S3Backend
 import graphique.http.GraphiqueRest
+import graphique.util.XdgConfigFactory
 import org.slf4j.LoggerFactory
 import spray.can.Http
 

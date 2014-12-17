@@ -2,7 +2,14 @@ package graphique.backends
 
 import graphique.images.{ImageValidator, ImageAttributes}
 
-class Backend(rawImages: RawImageManager, images: ImageManager) {
+/**
+ * A Graphique backend.
+ *
+ * @param rawImages the manager of raw images
+ * @param images the manager of images
+ * @param urlCache a cache of image URLs keyed by the requested image tag
+ */
+class Backend(rawImages: RawImageManager, images: ImageManager, urlCache: UrlCache) {
 
   import Backend._
 
@@ -21,6 +28,7 @@ class Backend(rawImages: RawImageManager, images: ImageManager) {
 
     if (imageValidator isValid image) {
       images.cache clearTaggedWith tag
+      urlCache clearTaggedWith tag
       rawImages store(tag, image)
     } else {
       throw new InvalidImageError
@@ -38,7 +46,9 @@ class Backend(rawImages: RawImageManager, images: ImageManager) {
    * @throws IOError
    */
   def imageUrlFor(tag: String, attributes: ImageAttributes): Option[String] = {
-    images imageUrl(RequestedImage(tag, attributes), rawImages read tag)
+    val request = RequestedImage(tag, attributes)
+    def urlValue = { println("Computing URL!"); images imageUrl(request, rawImages read tag) }
+    urlCache getUrlForOrElseUpdate (request, urlValue)
   }
 
   def imageUrlFor(tag: String): Option[String] = imageUrlFor(tag, ImageAttributes.originalImage)

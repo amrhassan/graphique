@@ -3,7 +3,10 @@ package graphique.backends.localbackend
 import java.nio.file.{Paths, Path}
 
 import com.typesafe.config.Config
-import graphique.backends.{RequestedImageCache, ImageManager, RawImageManager, Backend}
+import graphique.backends._
+import graphique.util.MapDbCache
+
+import scala.collection.parallel.mutable
 
 /**
  * A filesystem-backed backend implementation.
@@ -14,7 +17,7 @@ import graphique.backends.{RequestedImageCache, ImageManager, RawImageManager, B
  * To create an instance, use the factory method in the LocalBackend object.
  */
 class LocalBackend private(rawImages: RawImageManager, images: ImageManager)
-  extends Backend(rawImages, images)
+  extends Backend(rawImages, images, UrlCache.noCache)
 
 object LocalBackend {
 

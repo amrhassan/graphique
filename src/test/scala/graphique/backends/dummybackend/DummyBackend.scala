@@ -1,12 +1,12 @@
 package graphique.backends.dummybackend
 
-import graphique.backends.{RequestedImageCache, ImageManager, RawImageManager, Backend}
+import graphique.backends._
 
 /**
  * A fully functional backend that stores the file content in memory.
  */
 class DummyBackend private(rawImages: RawImageManager, images: ImageManager)
-  extends Backend(rawImages, images)
+  extends Backend(rawImages, images, UrlCache.noCache)
 
 object DummyBackend {
 

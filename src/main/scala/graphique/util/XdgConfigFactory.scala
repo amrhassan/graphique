@@ -1,4 +1,4 @@
-package graphique
+package graphique.util
 
 import java.nio.file.{Path, Paths}
 

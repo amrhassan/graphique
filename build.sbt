@@ -26,6 +26,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-testkit" % s"$akkaVersion",
   "jmimemagic" % "jmimemagic" % "0.1.2",
   "com.amazonaws" % "aws-java-sdk-s3" % "1.9.10",
+  "org.mapdb" % "mapdb" % "1.0.6",
   "org.scalatest" %% "scalatest" % "2.2.1" % "test",
   "org.scalamock" %% "scalamock-scalatest-support" % "3.2" % "test",
   "org.apache.commons" % "commons-lang3" % "3.3.2" % "test",

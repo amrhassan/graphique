@@ -1,5 +1,7 @@
 package graphique
 
+import scala.collection.mutable
+
 package object backends {
 
   type IOError = java.io.IOError
