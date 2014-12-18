@@ -7,11 +7,11 @@ import scala.collection.JavaConversions._
 
 trait UrlCache {
 
-  def hasUrlFor(requestedImage: RequestedImage): Boolean
+  def hasUrlFor(requestedImage: Image): Boolean
 
-  def getUrlFor(requestedImage: RequestedImage): Option[String]
+  def getUrlFor(requestedImage: Image): Option[String]
 
-  def getUrlForOrElseUpdate(requestedImage: RequestedImage, url: => Option[String]) : Option[String]
+  def getUrlForOrElseUpdate(requestedImage: Image, url: => Option[String]) : Option[String]
 
   def clearTaggedWith(tag: ImageTag): Unit
 }
@@ -30,7 +30,7 @@ object UrlCache {
  */
 class MapDbUrlCache(storageLocation: Path) extends UrlCache {
 
-  private type CacheMap = mutable.Map[ImageTag, Map[RequestedImage, Option[String]]]
+  private type CacheMap = mutable.Map[ImageTag, Map[Image, Option[String]]]
 
   private val db = {
     val directory = storageLocation.getParent
@@ -41,15 +41,15 @@ class MapDbUrlCache(storageLocation: Path) extends UrlCache {
 
   private val cacheMap: CacheMap = mapAsScalaMap(db.getHashMap("urls"))
 
-  def hasUrlFor(requestedImage: RequestedImage): Boolean = {
+  def hasUrlFor(requestedImage: Image): Boolean = {
     (tagged(requestedImage.tag) getOrElse Map.empty) contains requestedImage
   }
 
-  def getUrlFor(requestedImage: RequestedImage): Option[String] = {
+  def getUrlFor(requestedImage: Image): Option[String] = {
     (tagged(requestedImage.tag) getOrElse Map.empty) getOrElse(requestedImage, None)
   }
 
-  def getUrlForOrElseUpdate(requestedImage: RequestedImage, url: => Option[String]) : Option[String] = {
+  def getUrlForOrElseUpdate(requestedImage: Image, url: => Option[String]) : Option[String] = {
     this.synchronized {
       val group = tagged(requestedImage.tag) getOrElse Map.empty
       if (group contains requestedImage) {
@@ -71,7 +71,7 @@ class MapDbUrlCache(storageLocation: Path) extends UrlCache {
     }
   }
 
-  private def tagged(tag: ImageTag): Option[Map[RequestedImage, Option[String]]] = cacheMap get tag
+  private def tagged(tag: ImageTag): Option[Map[Image, Option[String]]] = cacheMap get tag
 }
 
 /**
@@ -79,11 +79,11 @@ class MapDbUrlCache(storageLocation: Path) extends UrlCache {
  */
 object IdentityUrlCache extends UrlCache {
 
-  def hasUrlFor(requestedImage: RequestedImage): Boolean = false
+  def hasUrlFor(requestedImage: Image): Boolean = false
 
   def clearTaggedWith(tag: ImageTag): Unit = {}
 
-  def getUrlForOrElseUpdate(requestedImage: RequestedImage, url: => Option[String]): Option[String] = url
+  def getUrlForOrElseUpdate(requestedImage: Image, url: => Option[String]): Option[String] = url
 
-  def getUrlFor(requestedImage: RequestedImage): Option[String] = None
+  def getUrlFor(requestedImage: Image): Option[String] = None
 }

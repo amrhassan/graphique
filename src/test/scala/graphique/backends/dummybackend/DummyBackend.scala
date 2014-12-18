@@ -5,18 +5,13 @@ import graphique.backends._
 /**
  * A fully functional backend that stores the file content in memory.
  */
-class DummyBackend private(rawImages: RawImageManager, images: ImageManager)
-  extends Backend(rawImages, images, UrlCache.noCache)
-
 object DummyBackend {
 
-  def apply(): DummyBackend = {
+  def apply(): Backend = {
     val io = new DummyIO
     val urls = new DummyUrlProvider(io, DummyPaths)
-    val requestedImageCache = new RequestedImageCache(io, DummyPaths)
-    val rawImages = new RawImageManager(DummyPaths, io)
-    val images = new ImageManager(requestedImageCache, urls)
+    val images = new ImageManager(io, DummyPaths)
 
-    new DummyBackend(rawImages, images)
+    new Backend(images, urls)
   }
 }

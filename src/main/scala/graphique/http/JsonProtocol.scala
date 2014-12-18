@@ -1,9 +1,9 @@
 package graphique.http
 
 import graphique.GraphiqueService
-import GraphiqueService.RequestedImageUrl
+import GraphiqueService.Image
 import spray.json.DefaultJsonProtocol
 
 object JsonProtocol extends DefaultJsonProtocol {
-  implicit val RequestedImageUrlFormat = jsonFormat1(RequestedImageUrl)
+  implicit val ImageFormat = jsonFormat1(Image)
 }

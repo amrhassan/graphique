@@ -16,8 +16,7 @@ import scala.collection.parallel.mutable
  *
  * To create an instance, use the factory method in the LocalBackend object.
  */
-class LocalBackend private(rawImages: RawImageManager, images: ImageManager)
-  extends Backend(rawImages, images, UrlCache.noCache)
+class LocalBackend private(images: ImageManager, urls: UrlProvider) extends Backend(images, urls)
 
 object LocalBackend {
 
@@ -33,14 +32,10 @@ object LocalBackend {
 
     val filePaths = new FilePaths(storageLocation)
     val io = new LocalIO
-
-    val requestedImageCache = new RequestedImageCache(io, filePaths)
     val urlProvider = new LocalUrlProvider(hostname, httpPort, filePaths)
+    val images = new ImageManager(io, filePaths)
 
-    val rawImages = new RawImageManager(filePaths, io)
-    val images = new ImageManager(requestedImageCache, urlProvider)
-
-    new LocalBackend(rawImages, images)
+    new LocalBackend(images, urlProvider)
   }
 
   /**

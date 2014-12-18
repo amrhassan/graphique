@@ -45,7 +45,7 @@ class DummyUrlProvider(io: IO, paths: Paths) extends UrlProvider {
       }
 
       try {
-        val imageContent = io read (paths ofImage imageId)
+        val imageContent = (io read (paths ofImage imageId)).get
         exchange.getResponseHeaders.add("Content-Type", Content.detectMimeType(imageContent).get)
         exchange.sendResponseHeaders(200, imageContent.length)
         val body = exchange.getResponseBody
@@ -57,5 +57,5 @@ class DummyUrlProvider(io: IO, paths: Paths) extends UrlProvider {
     }
   }
 
-  def forImage(id: ImageId): String = s"http://localhost:$Port/$id"
+  def apply(id: ImageId): String = s"http://localhost:$Port/$id"
 }

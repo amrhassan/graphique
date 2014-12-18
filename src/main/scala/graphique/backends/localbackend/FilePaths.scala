@@ -1,5 +1,6 @@
 package graphique.backends.localbackend
 
+import java.nio.file
 import java.nio.file.Path
 import graphique.backends.Paths
 
@@ -8,14 +9,4 @@ import graphique.backends.Paths
  *
  * @param storageLocation the root path of all files
  */
-private[localbackend] class FilePaths(storageLocation: Path) extends Paths(
-    rawImagePath = storageLocation resolve "raw",
-    imagePath = storageLocation resolve "image") {
-
-  /**
-   * The local path for the file corresponding to the requested ID coming through HTTP.
-   *
-   * @param identifier the ID coming in and in need to be matched to a filesystem path
-   */
-  def ofUrlComponent(identifier: String): Path = imagePath resolve identifier
-}
+private[localbackend] class FilePaths(storageLocation: Path) extends Paths(storageLocation)

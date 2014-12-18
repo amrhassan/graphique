@@ -1,50 +1,56 @@
 package graphique.backends
 
-import graphique.images
 import graphique.images.ImageProcessor
 
-/**
- * The manager of processed and servable images
- */
-class ImageManager(val cache: RequestedImageCache, val urlProvider: UrlProvider) {
+class ImageManager(io: IO, paths: Paths) {
 
   private val imageProcessor = new ImageProcessor
 
-  case class ImageProcessingError(imageTag: String, desiredAttributes: images.ImageAttributes, cause: Throwable)
-    extends RuntimeException(s"Failed while processing the image for $imageTag: $desiredAttributes", cause)
+  /**
+   * Submits a new image.
+   *
+   * @param imageContent the image content
+   * @throws InvalidImageError when the submitted content is not a valid image
+   * @throws IOError when evil IO stuff happens
+   * @throws InvalidImageError
+   * @return the tag of the submitted image
+   */
+  def submit(imageContent: ImageContent): ImageTag = {
+    val image = Image.from(imageContent)
+    store(imageContent, image)
+    image.tag
+  }
 
   /**
-   * Provide a servable URL for the requested image.
+   * Creates the requested image in the system.
    *
-   * The manager keeps an internal cache of the servable images and generates one only when
-   * none are found in the cache.
-   *
-   * @param request the requested image
-   * @param rawImage the raw image to be used to generate the servable image
-   * @return a URL pointing to an endpoint serving the requested image, or None if it was no available
+   * @throws SourceImageNotFoundError when the source of the requested image is not available
    * @throws ImageProcessingError
+   * @throws IOError
    */
-  def imageUrl(request: RequestedImage, rawImage: => Option[Array[Byte]]): Option[String] = {
-
-    def processRequestedImageIntoCache: Option[ImageId] = {
-      rawImage map { rawImageBytes =>
-        val errorOrImage = imageProcessor.process(rawImageBytes, request.attributes)
-        errorOrImage match {
-          case Right(processedImage) => {
-            val fileNameExtension = (Content detectFileNameExtension processedImage).getOrElse("")
-            val imageId = s"${request.tag}-${Paths hashImageAttributes request.attributes}$fileNameExtension"
-            cache.store(imageId, processedImage)
-            imageId
-          }
-          case Left(error) => throw ImageProcessingError(request.tag, request.attributes, error)
-        }
-      }
+  def createImage(image: Image): Unit = {
+    val source: ImageContent =
+      (io read (paths ofImage image.sourceId)) getOrElse (throw SourceImageNotFoundError(image.tag))
+    val errorOrImage = imageProcessor.process(source, image.attributes)
+    errorOrImage match {
+      case Right(processedImage) => store(processedImage, image)
+      case Left(error) => throw ImageProcessingError(image, error)
     }
+  }
 
-    val availableImages = cache.availableImages(request)
-    if (!availableImages.isEmpty)
-      Some(urlProvider forImage availableImages.head)
-    else
-      processRequestedImageIntoCache map urlProvider.forImage
+  /**
+   * Checks whether the image is available.
+   */
+  def has(image: Image): Boolean = {
+    io exists (paths ofImage image.id)
+  }
+
+  /**
+   * Stores an image content.
+   */
+  private def store(imageContent: ImageContent, image: Image): Unit = {
+    val path = paths ofImage image.id
+    (io write path)(imageContent)
   }
 }
+

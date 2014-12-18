@@ -1,15 +1,13 @@
 package graphique.http
 
-import graphique.images.{ImageAttributes, ImageFormat, Dimensions}
+import graphique.images.{ImageAttribute, ImageAttributes, ImageFormat, Dimensions}
 
 case class RequestedImageAttributes(size: Option[Dimensions], format: Option[ImageFormat]) {
 
-  lazy val toImageAttributes = {
-    var imageAttributes = ImageAttributes.originalImage
-    for (requestedSize <- size)
-      imageAttributes = imageAttributes.resizedTo(requestedSize)
-    for (requestedFormat <- format)
-      imageAttributes = imageAttributes.transcodedTo(requestedFormat)
-    imageAttributes
+  lazy val attributes = {
+    ImageAttributes(
+      (size map ImageAttribute.SizeWithin) getOrElse ImageAttribute.OriginalSize,
+      (format map ImageAttribute.TranscodedFormat) getOrElse ImageAttribute.OriginalFormat
+    )
   }
 }

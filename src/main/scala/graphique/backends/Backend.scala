@@ -1,59 +1,60 @@
 package graphique.backends
 
-import graphique.images.{ImageValidator, ImageAttributes}
+import graphique.images.ImageAttributes
 
 /**
  * A Graphique backend.
  *
- * @param rawImages the manager of raw images
- * @param images the manager of images
- * @param urlCache a cache of image URLs keyed by the requested image tag
  */
-class Backend(rawImages: RawImageManager, images: ImageManager, urlCache: UrlCache) {
-
-  import Backend._
-
-  private lazy val imageValidator = new ImageValidator
+class Backend(images: ImageManager, urls: UrlProvider) {
 
   /**
-   * Submits an image to the backend, overwriting any previously submitted image with the same
-   * tag if existed.
+   * Submits a new image.
    *
-   * @param tag an identifier tag for the submitted image
    * @param image the image content
    * @throws InvalidImageError when the submitted content is not a valid image
    * @throws IOError
+   * @return the tag of the submitted image
    */
-  def submitImage(tag: String, image: Array[Byte]): Unit = {
+  def submitImage(image: Array[Byte]): ImageTag = images submit image
 
-    if (imageValidator isValid image) {
-      images.cache clearTaggedWith tag
-      urlCache clearTaggedWith tag
-      rawImages store(tag, image)
-    } else {
-      throw new InvalidImageError
-    }
+  /**
+   * Requests that an image matching the specified attributes should be created.
+   *
+   * @param tag the image identifier
+   * @param attributes the attributes of the requested image
+   * @throws IOError
+   * @throws ImageProcessingError
+   * @throws SourceImageNotFoundError when the image requested is unavailable
+   */
+  def createImage(tag: ImageTag, attributes: ImageAttributes): Unit =
+    images createImage Image(tag, attributes)
+
+  def imageAvailable(tag: ImageTag, attributes: ImageAttributes): Boolean = images has Image(tag, attributes)
+
+  /**
+   * Makes sure that the requested image exists (or creates it) then returns its URL.
+   *
+   * @param tag
+   * @param attributes
+   * @throws ImageProcessingError
+   * @throws SourceImageNotFoundError when the image requested is unavailable
+   */
+  def urlForExistingImage(tag: ImageTag, attributes: ImageAttributes): String = {
+    if (!imageAvailable(tag, attributes))
+      createImage(tag, attributes)
+    imageUrlFor(tag, attributes)
   }
 
   /**
    * Request a publicly-servable URL for the image identified by the given tag and is with the given
-   * attributes.
+   * attributes. The image is only available if this was preceded by a call to createImage() with the
+   * same arguments.
    *
    * @param tag the identifier of the requested image
    * @param attributes the desired attributes of the requested image
-   * @return Optionally a publicly-servable URL for the requested image, or None if the image is not
-   *         available.
-   * @throws IOError
    */
-  def imageUrlFor(tag: String, attributes: ImageAttributes): Option[String] = {
-    val request = RequestedImage(tag, attributes)
-    def urlValue = { println("Computing URL!"); images imageUrl(request, rawImages read tag) }
-    urlCache getUrlForOrElseUpdate (request, urlValue)
+  def imageUrlFor(tag: ImageTag, attributes: ImageAttributes): String = {
+    urls(Image(tag, attributes).id)
   }
-
-  def imageUrlFor(tag: String): Option[String] = imageUrlFor(tag, ImageAttributes.originalImage)
-}
-
-object Backend {
-  class InvalidImageError extends RuntimeException
 }

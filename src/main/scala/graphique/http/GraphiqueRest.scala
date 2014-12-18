@@ -7,7 +7,7 @@ import akka.pattern.ask
 import akka.util.Timeout
 import graphique.GraphiqueService
 import graphique.images._
-import spray.http.StatusCodes
+import spray.http._
 import spray.routing.Route
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.{FiniteDuration, Duration}
@@ -25,28 +25,35 @@ class GraphiqueRest(graphiqueService: ActorRef) extends HttpServiceListener {
 
   implicit val timeout: Timeout = Timeout(1, TimeUnit.DAYS)
 
-  val extractImageAttributes = parameters('size.?.as[Option[Dimensions]](dimensionsOptionDeserializer),
-    'format.?.as(imageFormatOptionDeserializer)).as(RequestedImageAttributes)
+  val extractImageAttributes = parameters(
+    'sizeWithin.?.as[Option[Dimensions]](dimensionsOptionDeserializer),
+    'format.?.as[Option[ImageFormat]](imageFormatOptionDeserializer)
+  ).as(RequestedImageAttributes)
 
   override lazy val route: Route = {
-    path("image" / """[^/]+""".r ~ Slash.?) { tag =>
-      (put & requestEntityPresent & entity(as[Array[Byte]])) { image =>
-        detach() {
-          onSuccess(graphiqueService ? SubmitImage(image, tag)) {
-            // This detaches to an asynchronous call
-            case ImageSubmissionOK => complete(StatusCodes.Created)
-            case InvalidSubmittedImage => complete(StatusCodes.BadRequest)
-          }
-        }
-      } ~
-      (get & extractImageAttributes) { requestedImageAttributes =>
-        detach() {
-          onSuccess(graphiqueService ? RequestImageUrl(tag, requestedImageAttributes.toImageAttributes)) {
-            case RequestedImageNotFound => complete(StatusCodes.NotFound, "Requested image not found")
-            case message: RequestedImageUrl => complete(message)
-          }
+
+    path("images" ~ Slash.?) {
+      (post & requestEntityPresent & entity(as[Array[Byte]])) { imageContent =>
+        onSuccess(graphiqueService ? SubmitImage(imageContent)) {
+          case ImageSubmissionOK(tag) =>
+            val headers = List(HttpHeaders.Location(Uri(s"/image/$tag")))
+            complete(HttpResponse(StatusCodes.Created, headers = headers))
         }
       }
-    }
+    } ~
+      (path("image" / """.*""".r) & extractImageAttributes) { (tag, requestedImageAttributes) =>
+        get {
+          onSuccess(graphiqueService ? RequestImage(tag, requestedImageAttributes.attributes, makeSurExists = false)) {
+            case image: Image => complete(image)
+            case SourceImageNotFound(_) => complete(StatusCodes.NotFound)
+          }
+        } ~
+        patch {
+          onSuccess(graphiqueService ? RequestImage(tag, requestedImageAttributes.attributes, makeSurExists = true)) {
+            case image: Image => complete(image)
+            case SourceImageNotFound(_) => complete(StatusCodes.NotFound)
+          }
+        }
+     }
   }
 }

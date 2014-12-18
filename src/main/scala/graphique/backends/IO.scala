@@ -25,11 +25,11 @@ trait IO {
   def exists(path: Path): Boolean
 
   /**
-   * Reads and returns all the bytes from the file pointed to by the given path.
+   * Reads and returns all the bytes from the file pointed to by the given path, if found.
    *
    * @throws IOError
    */
-  def read(path: Path): Array[Byte]
+  def read(path: Path): Option[Array[Byte]]
 
   /**
    * Deletes files in the given directory whose filenames are prefixed by the given prefix.

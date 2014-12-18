@@ -18,9 +18,9 @@ class BackendTest extends TestSpec {
 
   "A Backend" should "reject corrupted image" in {
     withBackend { backend =>
-      intercept[Backend.InvalidImageError] {
+      intercept[InvalidImageError] {
         val image = readResource("invalid_image.jpg")
-        backend submitImage("sup", image)
+        backend submitImage image
       }
     }
   }
@@ -28,51 +28,52 @@ class BackendTest extends TestSpec {
   it should "accept a valid image" in {
     withBackend { backend =>
       val image = readResource("like_a_sir.jpg")
-      backend submitImage("like_a_sir", image)
+      backend submitImage image
     }
   }
 
   it should "have a URL for a submitted image" in {
     withBackend { backend =>
       val image = readResource("like_a_sir.jpg")
-      backend submitImage("like_a_sir", image)
-      val url = backend imageUrlFor("like_a_sir", ImageAttributes.originalImage)
-      url should not be None
+      val tag = backend submitImage image
+      backend imageUrlFor (tag, ImageAttributes.originalImage)
     }
   }
 
-  it should "not have a URL for an unsubmitted image" in {
+  it should "create a variation of an image it has" in {
     withBackend { backend =>
-      (backend imageUrlFor "like_a_sir") should be(None)
+      val image = readResource("like_a_sir.jpg")
+      val tag = backend submitImage image
+      backend createImage (tag, ImageAttributes.originalImage.resizedTo(Dimensions(100, 100)))
     }
   }
 
   it should "respond with a JPEG image URL when requested" in {
     withBackend { backend =>
-      backend submitImage("ayam_soda", readResource("ayam_soda.png"))
-      val url = backend imageUrlFor("ayam_soda", ImageAttributes.originalImage.transcodedTo(JPEGFormat()))
+      val tag = backend submitImage readResource("ayam_soda.png")
+      val url = backend urlForExistingImage (tag, ImageAttributes.originalImage.transcodedTo(JPEGFormat()))
       url should not be None
-      val response = gulp(Unirest.get(url.get).asBinary().getBody)
+      val response = gulp(Unirest.get(url).asBinary().getBody)
       (Content detectMimeType response.toArray) should be(Some("image/jpeg"))
     }
   }
 
   it should "respond with a PNG image URL when requested" in {
     withBackend { backend =>
-      backend submitImage("sir", readResource("like_a_sir.jpg"))
-      val url = backend imageUrlFor("sir", ImageAttributes.originalImage.transcodedTo(PNGFormat))
+      val tag = backend submitImage readResource("like_a_sir.jpg")
+      val url = backend urlForExistingImage (tag, ImageAttributes.originalImage.transcodedTo(PNGFormat))
       url should not be None
-      val response = gulp(Unirest.get(url.get).asBinary().getBody)
+      val response = gulp(Unirest.get(url).asBinary().getBody)
       (Content detectMimeType response.toArray) should be(Some("image/png"))
     }
   }
 
   it should "respond with an image within the requested image size" in {
     withBackend { backend =>
-      backend submitImage("sir", readResource("like_a_sir.jpg"))
-      val url = backend imageUrlFor("sir", ImageAttributes.originalImage.resizedTo(Dimensions(100, 100)))
+      val tag = backend submitImage readResource("like_a_sir.jpg")
+      val url = backend urlForExistingImage (tag, ImageAttributes.originalImage.resizedTo(Dimensions(100, 100)))
       url should not be None
-      val responseImage = ImageIO.read(Unirest.get(url.get).asBinary().getBody)
+      val responseImage = ImageIO.read(Unirest.get(url).asBinary().getBody)
       responseImage.getHeight should be(100)
       responseImage.getWidth should be(92 +- 2)
     }

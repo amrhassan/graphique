@@ -1,5 +1,6 @@
 package graphique.backends
 
+import graphique.images.{PNGFormat, JPEGFormat, ImageFormat}
 import net.sf.jmimemagic.{MagicException, MagicMatchNotFoundException, MagicParseException, Magic}
 
 /**
@@ -18,6 +19,20 @@ object Content {
       case _: MagicMatchNotFoundException => None
       case _: MagicException => None
     }
+
+  /**
+   * Detects and returns the image format of the given image content.
+   *
+   * @return the image format or None of it's not a recognizable image
+   */
+  def detectImageFormat(data: ImageContent): Option[ImageFormat] = {
+    detectMimeType(data) flatMap {
+      case "image/jpeg" => Some(JPEGFormat())
+      case "image/jpg" => Some(JPEGFormat())
+      case "image/png" => Some(PNGFormat)
+      case _ => None
+    }
+  }
 
   def detectFileNameExtension(data: Array[Byte]): Option[String] =
     detectMimeType(data) map {

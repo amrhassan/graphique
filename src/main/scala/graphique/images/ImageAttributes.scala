@@ -8,13 +8,13 @@ package graphique.images
  *  To specify that an image should carry the attributes of the original image
  *  but resized to fit within a 120 by 100 rectangle:
  *  
- *  val attributes = ImageAttributes.originalImage.resizedTo(Dimensions(120, 100))
+ *  val attributes = ImageAttributes.originalImage(JPEGFormat).resizedTo(Dimensions(120, 100))
  *  
  *  To specify a PNG version of that image:
  *  
  *  val pngVersion = attributes.transcodedTo(PNGFormat)
  */
-case class ImageAttributes private(size: ImageAttribute.Size, format: ImageAttribute.Format) {
+case class ImageAttributes(size: ImageAttribute.Size, format: ImageAttribute.Format) {
 
   /**
    * Specifies that the image should fit within the specified size.
@@ -30,15 +30,12 @@ case class ImageAttributes private(size: ImageAttribute.Size, format: ImageAttri
    */
   def transcodedTo(format: ImageFormat): ImageAttributes =
     copy(format = ImageAttribute.TranscodedFormat(format))
+
+  def isUnmodified: Boolean =
+    (size == ImageAttribute.OriginalSize) && (format == ImageAttribute.OriginalFormat)
 }
 
 case object ImageAttributes {
-
-  /**
-   * The attributes of the original image unchanged.
-   */
   lazy val originalImage =
     ImageAttributes(size = ImageAttribute.OriginalSize, format = ImageAttribute.OriginalFormat)
-
-  def apply(): ImageAttributes = originalImage
 }

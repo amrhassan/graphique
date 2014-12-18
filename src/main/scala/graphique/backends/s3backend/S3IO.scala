@@ -1,6 +1,6 @@
 package graphique.backends.s3backend
 
-import java.io.{IOError, ByteArrayInputStream}
+import java.io.ByteArrayInputStream
 import java.nio.file.Path
 import com.amazonaws.AmazonServiceException
 import com.amazonaws.auth.BasicAWSCredentials
@@ -9,7 +9,6 @@ import com.amazonaws.services.s3.model.{PutObjectRequest, CannedAccessControlLis
 import com.typesafe.scalalogging.LazyLogging
 import graphique.backends.{Content, IO}
 import scala.io.{Codec, Source}
-import scala.util.Try
 
 /**
  * Low-level AWS S3 IO.
@@ -63,7 +62,7 @@ private[s3backend] class S3IO(accessKey: String, secretKey: String, bucket: Stri
     }
   }
 
-  def read(path: Path): Array[Byte] = {
+  def read(path: Path): Option[Array[Byte]] = {
     logger debug "READ"
     withS3Client { client =>
       val s3Object = client.getObject(bucket, path.toString)
@@ -72,7 +71,7 @@ private[s3backend] class S3IO(accessKey: String, secretKey: String, bucket: Stri
       val data = (source map (_.toByte)).toArray
       inStream.close()
       s3Object.close()
-      data
+      Some(data)
     }
   }
 }
