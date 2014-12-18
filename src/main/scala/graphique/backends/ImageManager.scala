@@ -2,6 +2,8 @@ package graphique.backends
 
 import graphique.images.ImageProcessor
 
+import scala.util.Try
+
 class ImageManager(io: IO, paths: Paths) {
 
   private val imageProcessor = new ImageProcessor
@@ -30,7 +32,7 @@ class ImageManager(io: IO, paths: Paths) {
    */
   def createImage(image: Image): Unit = {
     val source: ImageContent =
-      (io read (paths ofImage image.sourceId)) getOrElse (throw SourceImageNotFoundError(image.tag))
+      Try(io read (paths ofImage image.sourceId)) getOrElse (throw SourceImageNotFoundError(image.tag))
     val errorOrImage = imageProcessor.process(source, image.attributes)
     errorOrImage match {
       case Right(processedImage) => store(processedImage, image)

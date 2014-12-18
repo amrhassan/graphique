@@ -29,7 +29,7 @@ trait IO {
    *
    * @throws IOError
    */
-  def read(path: Path): Option[Array[Byte]]
+  def read(path: Path): Array[Byte]
 
   /**
    * Deletes files in the given directory whose filenames are prefixed by the given prefix.

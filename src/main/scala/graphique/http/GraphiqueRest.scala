@@ -34,24 +34,30 @@ class GraphiqueRest(graphiqueService: ActorRef) extends HttpServiceListener {
 
     path("images" ~ Slash.?) {
       (post & requestEntityPresent & entity(as[Array[Byte]])) { imageContent =>
-        onSuccess(graphiqueService ? SubmitImage(imageContent)) {
-          case ImageSubmissionOK(tag) =>
-            val headers = List(HttpHeaders.Location(Uri(s"/image/$tag")))
-            complete(HttpResponse(StatusCodes.Created, headers = headers))
+        detach() {
+          onSuccess(graphiqueService ? SubmitImage(imageContent)) {
+            case ImageSubmissionOK(tag) =>
+              val headers = List(HttpHeaders.Location(Uri(s"/image/$tag")))
+              complete(HttpResponse(StatusCodes.Created, headers = headers))
+          }
         }
       }
     } ~
       (path("image" / """.*""".r) & extractImageAttributes) { (tag, requestedImageAttributes) =>
         get {
-          onSuccess(graphiqueService ? RequestImage(tag, requestedImageAttributes.attributes, makeSurExists = false)) {
-            case image: Image => complete(image)
-            case SourceImageNotFound(_) => complete(StatusCodes.NotFound)
+          detach() {
+            onSuccess(graphiqueService ? RequestImage(tag, requestedImageAttributes.attributes, makeSurExists = false)) {
+              case image: Image => complete(image)
+              case SourceImageNotFound(_) => complete(StatusCodes.NotFound)
+            }
           }
         } ~
         patch {
-          onSuccess(graphiqueService ? RequestImage(tag, requestedImageAttributes.attributes, makeSurExists = true)) {
-            case image: Image => complete(image)
-            case SourceImageNotFound(_) => complete(StatusCodes.NotFound)
+          detach() {
+            onSuccess(graphiqueService ? RequestImage(tag, requestedImageAttributes.attributes, makeSurExists = true)) {
+              case image: Image => complete(image)
+              case SourceImageNotFound(_) => complete(StatusCodes.NotFound)
+            }
           }
         }
      }

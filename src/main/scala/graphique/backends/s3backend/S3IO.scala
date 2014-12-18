@@ -62,7 +62,7 @@ private[s3backend] class S3IO(accessKey: String, secretKey: String, bucket: Stri
     }
   }
 
-  def read(path: Path): Option[Array[Byte]] = {
+  def read(path: Path): Array[Byte] = {
     logger debug "READ"
     withS3Client { client =>
       val s3Object = client.getObject(bucket, path.toString)
@@ -71,7 +71,7 @@ private[s3backend] class S3IO(accessKey: String, secretKey: String, bucket: Stri
       val data = (source map (_.toByte)).toArray
       inStream.close()
       s3Object.close()
-      Some(data)
+      data
     }
   }
 }

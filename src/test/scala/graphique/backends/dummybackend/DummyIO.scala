@@ -11,7 +11,7 @@ class DummyIO extends IO {
 
   var data = mutable.Map.empty[file.Path, Array[Byte]]
 
-  def read(path: file.Path): Option[Array[Byte]] = data.get(path)
+  def read(path: file.Path): Array[Byte] = data(path)
 
   def exists(path: file.Path): Boolean = data contains path
 

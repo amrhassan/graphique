@@ -19,7 +19,7 @@ class LocalIOTest extends TestSpec {
   it should "read correctly" in {
     val path = tempFile
     Files.write(path, "Hi".getBytes)
-    String.valueOf((io read path).get map (_.toChar)) should be("Hi")
+    String.valueOf((io read path) map (_.toChar)) should be("Hi")
   }
 
   it should "check files for existence correctly" in {

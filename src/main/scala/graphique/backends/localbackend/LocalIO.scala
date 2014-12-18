@@ -41,9 +41,9 @@ private[localbackend] class LocalIO extends IO {
     }
   }
 
-  def read(path: Path): Option[Array[Byte]] =
+  def read(path: Path): Array[Byte] =
     try {
-      Some(Files.readAllBytes(path))
+      Files.readAllBytes(path)
     } catch {
       case e: IOException => throw new IOError(e)
     }
