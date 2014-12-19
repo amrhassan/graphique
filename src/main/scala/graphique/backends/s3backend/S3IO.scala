@@ -35,7 +35,7 @@ private[s3backend] class S3IO(accessKey: String, secretKey: String, bucket: Stri
     val metadata = new ObjectMetadata
 
     // Try to detect the mime type
-    (Content detectMimeType data) foreach (mimeType => metadata setContentType(mimeType))
+    (Content detectMimeType data) foreach (mimeType => metadata setContentType mimeType)
 
     metadata
   }
