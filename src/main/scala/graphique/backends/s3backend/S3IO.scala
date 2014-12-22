@@ -28,6 +28,7 @@ private[s3backend] class S3IO(accessKey: String, secretKey: String, bucket: Stri
   def write(dest: Path)(data: Array[Byte]): Unit = {
     logger debug "WRITE"
     val request = new PutObjectRequest(bucket, dest.toString, new ByteArrayInputStream(data), metadataFor(data))
+    request.getRequestClientOptions.setReadLimit(data.length)
     request.setCannedAcl(CannedAccessControlList.PublicRead)
     s3Client.putObject(request)
 //    val uploading = transferManager upload request
