@@ -30,7 +30,9 @@ class GraphiqueService(backend: Backend, threadPoolSize: Int) extends Actor with
           case e: InvalidImageError => originalSender ! InvalidSubmittedImage
         }
       } onFailure {
-        case e: Throwable  => log error(e, "Unexpected error")
+        case e: Throwable  =>
+          log error(e, "Unexpected error")
+          originalSender ! ImageSubmissionFailure(e)
       }
 
     case RequestImage(tag, attributes, makeSureExists) =>
@@ -46,6 +48,7 @@ class GraphiqueService(backend: Backend, threadPoolSize: Int) extends Actor with
             backend imageUrlFor(tag, attributes)
           }
 
+          log info s"Image request succeeded"
           originalSender ! Image(url)
 
         } catch {
@@ -62,8 +65,8 @@ object GraphiqueService {
   /**
    * Submit an image.
    *
-   * This request message is responded to by either an ImageSubmissionOK or an InvalidSubmittedImage
-   * message.
+   * This request message is responded to by either an ImageSubmissionOK, an InvalidSubmittedImage, or
+   * an ImageSubmissionFailure(throwable) message.
    *
    * @param image the binary content of the image
    */
@@ -72,6 +75,8 @@ object GraphiqueService {
   case class ImageSubmissionOK(tag: ImageTag)
 
   case object InvalidSubmittedImage
+
+  case class ImageSubmissionFailure(error: Throwable)
 
   /**
    * Request an HTTP URL for the image identified by the given tag and in the specified attributes.

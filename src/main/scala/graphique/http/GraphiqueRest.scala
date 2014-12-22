@@ -40,6 +40,10 @@ class GraphiqueRest(graphiqueService: ActorRef, threadPoolSize: Int) extends Htt
             case ImageSubmissionOK(tag) =>
               val headers = List(HttpHeaders.Location(Uri(s"/image/$tag")))
               complete(HttpResponse(StatusCodes.Created, headers = headers))
+            case InvalidSubmittedImage =>
+              complete(HttpResponse(StatusCodes.BadRequest))
+            case ImageSubmissionFailure(_) =>
+              complete(HttpResponse(StatusCodes.InternalServerError))
           }
         }
       }
