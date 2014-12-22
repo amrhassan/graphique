@@ -9,4 +9,4 @@ package:
 install: package
 	install -Dm 744 target/scala*/*-assembly*.jar $(destdir)$(PREFIX)/share/$(PROJECT_NAME)/$(PROJECT_NAME).jar
 	install -Dm 755 scripts/$(PROJECT_NAME) $(destdir)$(PREFIX)/bin/$(PROJECT_NAME)
-	install -dm 744 /var/log/$(PROJECT_NAME)/
+	install -dm 744 $(destdir)/var/log/$(PROJECT_NAME)/
