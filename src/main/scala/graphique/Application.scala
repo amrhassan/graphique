@@ -23,12 +23,22 @@ object Application extends App {
   }
 
   log info s"Using the backend: ${backend.getClass.getSimpleName}"
-  val graphique = actorSystem actorOf Props(new GraphiqueService(backend))
-  val restService = actorSystem actorOf Props(new GraphiqueRest(graphique))
+
+  val graphique =
+    actorSystem actorOf(Props(new GraphiqueService(backend, config.getInt("threadPoolSize"))), "graphique")
+
+  val restService =
+    actorSystem actorOf(Props(new GraphiqueRest(graphique, config.getInt("threadPoolSize"))), "graphique-rest")
 
   val senderActor = actorSystem actorOf Props(new Actor with ActorLogging {
     def receive: Receive = {
       case Http.Bound(_) => log info s"REST service launched"
+      case Http.CommandFailed(_) =>
+        log error "Failed to launch REST service"
+        context.system.shutdown()
+      case m =>
+        log warning s"Unexpected message: $m"
+        context.system.shutdown()
     }
   })
 

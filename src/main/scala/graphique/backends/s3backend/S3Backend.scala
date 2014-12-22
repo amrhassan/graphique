@@ -7,10 +7,10 @@ class S3Backend private(images: ImageManager, urls: UrlProvider) extends Backend
 
 object S3Backend {
 
-  def apply(accessKey: String, secretKey: String, bucket: String): S3Backend = {
+  def apply(accessKey: String, secretKey: String, bucket: String, pathPrefix: String): S3Backend = {
 
     val io = new S3IO(accessKey, secretKey, bucket)
-    val paths = new S3Paths
+    val paths = new S3Paths(pathPrefix)
     val urlProvider = new S3UrlProvider(bucket, paths)
     val images = new ImageManager(io, paths)
 
@@ -21,6 +21,7 @@ object S3Backend {
     apply(
       config.getString("accessKey"),
       config.getString("secretKey"),
-      config.getString("bucket")
+      config.getString("bucket"),
+      config.getString("pathPrefix")
     )
 }

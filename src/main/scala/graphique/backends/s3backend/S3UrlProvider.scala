@@ -1,6 +1,6 @@
 package graphique.backends.s3backend
 
-import graphique.backends.{Image, ImageId, UrlProvider}
+import graphique.backends.{ImageId, UrlProvider}
 
 
 class S3UrlProvider(bucket: String, paths: S3Paths) extends UrlProvider {

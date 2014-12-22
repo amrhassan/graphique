@@ -1,31 +1,36 @@
 package graphique
 
+import java.util.concurrent.Executors
+
 import akka.actor.{Actor, ActorLogging}
 import graphique.backends._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
  * The entry point to the Graphique microservice.
  */
-class GraphiqueService(backend: Backend) extends Actor with ActorLogging {
+class GraphiqueService(backend: Backend, threadPoolSize: Int) extends Actor with ActorLogging {
 
   import GraphiqueService._
-  import scala.concurrent.ExecutionContext.Implicits.global
+  implicit val ec = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(threadPoolSize))
 
   override final def receive: Receive = {
 
     case SubmitImage(image) =>
 
-      log info s"Submitting an ${image.length}B image with the tag"
+      log info s"Submitting a ${image.length}B image"
       val originalSender = sender
       Future {
         try {
           val tag = backend submitImage image
+          log info s"Submitted successfully with tag $tag"
           originalSender ! ImageSubmissionOK(tag)
         } catch {
           case e: InvalidImageError => originalSender ! InvalidSubmittedImage
         }
+      } onFailure {
+        case e: Throwable  => log error(e, "Unexpected error")
       }
 
     case RequestImage(tag, attributes, makeSureExists) =>
@@ -46,6 +51,8 @@ class GraphiqueService(backend: Backend) extends Actor with ActorLogging {
         } catch {
           case SourceImageNotFoundError(_) => originalSender ! SourceImageNotFound(tag)
         }
+      } onFailure {
+        case e: Throwable  => log error(e, "Unexpected error")
       }
   }
 }

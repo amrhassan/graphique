@@ -1,6 +1,6 @@
 package graphique.http
 
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.{Executors, Executor, TimeUnit}
 
 import akka.actor.ActorRef
 import akka.pattern.ask
@@ -9,19 +9,20 @@ import graphique.GraphiqueService
 import graphique.images._
 import spray.http._
 import spray.routing.Route
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.{FiniteDuration, Duration}
+
+import scala.concurrent.ExecutionContext
 
 /**
  * The REST interface to the ImageService actor.
  */
-class GraphiqueRest(graphiqueService: ActorRef) extends HttpServiceListener {
+class GraphiqueRest(graphiqueService: ActorRef, threadPoolSize: Int) extends HttpServiceListener {
 
   import GraphiqueService._
 
   import spray.httpx.SprayJsonSupport.sprayJsonMarshaller
   import JsonProtocol._
   import ImageAttributeDeserializers._
+  implicit val ec = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(threadPoolSize))
 
   implicit val timeout: Timeout = Timeout(1, TimeUnit.DAYS)
 
