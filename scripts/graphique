@@ -1,0 +1,8 @@
+#! /bin/sh
+
+PROJECT_NAME=graphique
+PREFIX=/usr
+JVM_OPTIONS="-Xmx2G -Xms500M"
+JAVA="java"
+
+${JAVA} ${JVM_OPTIONS} ${PREFIX}/share/${PROJECT_NAME}/${PROJECT_NAME}.jar
