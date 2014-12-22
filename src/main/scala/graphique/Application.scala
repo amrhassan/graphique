@@ -30,14 +30,14 @@ object Application extends App {
   val restService =
     actorSystem actorOf(Props(new GraphiqueRest(graphique, config.getInt("threadPoolSize"))), "graphique-rest")
 
-  val senderActor = actorSystem actorOf Props(new Actor with ActorLogging {
+  val senderActor = actorSystem actorOf Props(new Actor {
     def receive: Receive = {
       case Http.Bound(_) => log info s"REST service launched"
       case Http.CommandFailed(_) =>
         log error "Failed to launch REST service"
         context.system.shutdown()
       case m =>
-        log warning s"Unexpected message: $m"
+        log warn s"Unexpected message: $m"
         context.system.shutdown()
     }
   })

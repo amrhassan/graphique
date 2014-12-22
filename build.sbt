@@ -13,7 +13,7 @@ val sprayVersion = "1.3.2"
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.2.1",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
-  "org.slf4j" % "slf4j-simple" % "1.7.7",
+  "ch.qos.logback" % "logback-classic" % "1.1.2",
   "com.typesafe.akka" %% "akka-slf4j" % "2.3.7",
   "net.coobird" % "thumbnailator" % "0.4.7",
   "commons-codec" % "commons-codec" % "1.10",

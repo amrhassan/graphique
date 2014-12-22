@@ -3,43 +3,52 @@ package graphique
 import java.util.concurrent.Executors
 
 import akka.actor.{Actor, ActorLogging}
+import com.typesafe.scalalogging.Logger
 import graphique.backends._
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
  * The entry point to the Graphique microservice.
  */
-class GraphiqueService(backend: Backend, threadPoolSize: Int) extends Actor with ActorLogging {
+class GraphiqueService(backend: Backend, threadPoolSize: Int) extends Actor {
 
   import GraphiqueService._
   implicit val ec = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(threadPoolSize))
+
+  val log = Logger(LoggerFactory.getLogger("GraphiqueService"))
 
   override final def receive: Receive = {
 
     case SubmitImage(image) =>
 
-      log info s"Submitting a ${image.length}B image"
       val originalSender = sender
       Future {
+        log info s"Submitting a ${image.length} byte image"
         try {
           val tag = backend submitImage image
-          log info s"Submitted successfully with tag $tag"
+          log info s"Submitted $tag successfully"
           originalSender ! ImageSubmissionOK(tag)
         } catch {
           case e: InvalidImageError => originalSender ! InvalidSubmittedImage
         }
       } onFailure {
         case e: Throwable  =>
-          log error(e, "Unexpected error")
+          log error("Unexpected error", e)
           originalSender ! ImageSubmissionFailure(e)
       }
 
     case RequestImage(tag, attributes, makeSureExists) =>
 
-      log info s"Requesting the image $tag (makeSureExists=$makeSureExists) with attributes $attributes"
       val originalSender = sender
       Future {
+
+        if (makeSureExists)
+          log info s"Requesting $tag with attributes $attributes"
+        else
+          log info s"Requesting $tag (makeSureExists=$makeSureExists) with attributes $attributes"
+
         try {
 
           val url = if (makeSureExists) {
@@ -48,14 +57,14 @@ class GraphiqueService(backend: Backend, threadPoolSize: Int) extends Actor with
             backend imageUrlFor(tag, attributes)
           }
 
-          log info s"Image request succeeded"
           originalSender ! Image(url)
+          log info s"Image request fulfilled successfully"
 
         } catch {
           case SourceImageNotFoundError(_) => originalSender ! SourceImageNotFound(tag)
         }
       } onFailure {
-        case e: Throwable  => log error(e, "Unexpected error")
+        case e: Throwable  => log error("Unexpected error", e)
       }
   }
 }
