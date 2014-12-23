@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
     <script src="javascripts/scale.fix.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -17,14 +16,18 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1>Graphique</h1>
-        <p>Image Management Microservice</p>
-        <p class="view"><a href="https://github.com/amrhassan/graphique">View the Project on GitHub <small>amrhassan/graphique</small></a></p>
+        <h1 class="header">Graphique</h1>
+        <p class="header">Image Management Microservice</p>
+
         <ul>
-          <li><a href="https://github.com/amrhassan/graphique/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/amrhassan/graphique/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/amrhassan/graphique">View On <strong>GitHub</strong></a></li>
+          <li class="download"><a class="buttons" href="https://github.com/amrhassan/graphique/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/amrhassan/graphique/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/amrhassan/graphique">View On GitHub</a></li>
         </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/amrhassan">amrhassan</a></p>
+
+
       </header>
       <section>
         <p><a href="https://waffle.io/amrhassan/graphique"><img src="https://badge.waffle.io/amrhassan/graphique.png?label=ready&amp;title=Ready" alt="Stories in Ready"></a>
@@ -33,7 +36,7 @@
 <h1>
 <a id="graphique" class="anchor" href="#graphique" aria-hidden="true"><span class="octicon octicon-link"></span></a>Graphique</h1>
 
-<p>An image management <a href="http://microservices.io/patterns/microservices.html">microservice</a> written using the awesomeness of Scala, <a href="http://akka.io/">Akka</a>, <a href="http://spray.io/">Spray</a> and <a href="https://code.google.com/p/thumbnailator/">Thumbnailator</a>.</p>
+<p>An image management <a href="http://microservices.io/patterns/microservices.html">microservice</a> built using the awesomeness of Scala, <a href="http://akka.io/">Akka</a>, <a href="http://spray.io/">Spray</a> and <a href="https://code.google.com/p/thumbnailator/">Thumbnailator</a>.</p>
 
 <p>It is built to handle:</p>
 
@@ -43,23 +46,23 @@
 <li>generating publicly-servable URLs for the managed images</li>
 </ul>
 
-<p>It exposes its functionality through <a href="https://github.com/amrhassan/graphique/wiki/API-Documentation">RESTful APIs</a>.</p>
+<p>Graphique stores and hosts its own images over HTTP by default and it can use a different storage and file serving system like AWS S3, if configured to do so. It exposes its functionality through <a href="https://github.com/amrhassan/graphique/wiki/API-Documentation">RESTful APIs</a>.</p>
 
-<h1>
-<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h1>
+<h3>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h3>
 
-<ul>
-<li><code>sbt (=&gt; 0.13.7)</code></li>
-</ul>
+<p>The associated <code>Makefile</code> can install the application by executing the <code>install</code> target directly:</p>
 
-<h1>
-<a id="running" class="anchor" href="#running" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running</h1>
+<pre><code>make install
+</code></pre>
 
-<ol>
-<li>
-<code>cd</code> into the directory where the the project is</li>
-<li><code>sbt run</code></li>
-</ol>
+<h3>
+<a id="running-from-source" class="anchor" href="#running-from-source" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running From Source</h3>
+
+<p>To run the service directly from its source code location, execute the following in the root of the source code tree:</p>
+
+<pre><code>sbt run
+</code></pre>
 
 <h1>
 <a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h1>
@@ -81,13 +84,12 @@ spins up an internal http server to serve the requested images.</p>
 <p>This backend enables Graphique to store its images on an S3 bucket as public files and delegate the image serving
 to S3.</p>
       </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
     </div>
-    <footer>
-      <p>Project maintained by <a href="https://github.com/amrhassan">amrhassan</a></p>
-      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
-    </footer>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-              <script type="text/javascript">
+		          <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
