@@ -3,7 +3,7 @@
 
 # Graphique #
 
-An image management [microservice](http://microservices.io/patterns/microservices.html) built using the awesomeness of Scala, [Akka](http://akka.io/), [Spray](http://spray.io/) and [Thumbnailator](https://code.google.com/p/thumbnailator/).
+An image management [microservice](http://microservices.io/patterns/microservices.html) built using the awesomeness of Scala, [Akka](http://akka.io/) and [Spray](http://spray.io/).
 
 It is built to handle:
 * the low level book keeping of storing the actual image files
@@ -11,6 +11,8 @@ It is built to handle:
 * generating publicly-servable URLs for the managed images
 
 Graphique stores and hosts its own images over HTTP by default and it can use a different storage and file serving system like AWS S3, if configured to do so. It exposes its functionality through [RESTful APIs](https://github.com/amrhassan/graphique/wiki/API-Documentation).
+
+The actual image processing and heavy lifting is done by the awesome [Thumbnailator](https://code.google.com/p/thumbnailator/).
 
 ### Latest Release ###
 Download the latest release [from here](https://github.com/amrhassan/graphique/releases/latest).
