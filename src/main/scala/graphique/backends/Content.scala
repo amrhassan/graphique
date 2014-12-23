@@ -18,6 +18,7 @@ object Content {
       case _: MagicParseException => None
       case _: MagicMatchNotFoundException => None
       case _: MagicException => None
+      case _: Throwable => None   // The JMimeMagic library is old and throws weird errors sometimes
     }
 
   /**
