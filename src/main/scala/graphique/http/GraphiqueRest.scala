@@ -27,7 +27,7 @@ class GraphiqueRest(graphiqueService: ActorRef, threadPoolSize: Int) extends Htt
   implicit val timeout: Timeout = Timeout(1, TimeUnit.DAYS)
 
   val extractImageAttributes = parameters(
-    'sizeWithin.?.as[Option[Dimensions]](dimensionsOptionDeserializer),
+    "size-within".?.as[Option[Dimensions]](dimensionsOptionDeserializer),
     'format.?.as[Option[ImageFormat]](imageFormatOptionDeserializer)
   ).as(RequestedImageAttributes)
 
@@ -42,7 +42,7 @@ class GraphiqueRest(graphiqueService: ActorRef, threadPoolSize: Int) extends Htt
               complete(HttpResponse(StatusCodes.Created, headers = headers))
             case InvalidSubmittedImage =>
               complete(HttpResponse(StatusCodes.BadRequest))
-            case ImageSubmissionFailure(_) =>
+            case UnexpectedFailure(_) =>
               complete(HttpResponse(StatusCodes.InternalServerError))
           }
         }
@@ -54,6 +54,8 @@ class GraphiqueRest(graphiqueService: ActorRef, threadPoolSize: Int) extends Htt
             onSuccess(graphiqueService ? RequestImage(tag, requestedImageAttributes.attributes, makeSurExists = false)) {
               case image: Image => complete(image)
               case SourceImageNotFound(_) => complete(StatusCodes.NotFound)
+              case UnexpectedFailure(_) =>
+                complete(HttpResponse(StatusCodes.InternalServerError))
             }
           }
         } ~
@@ -62,6 +64,8 @@ class GraphiqueRest(graphiqueService: ActorRef, threadPoolSize: Int) extends Htt
             onSuccess(graphiqueService ? RequestImage(tag, requestedImageAttributes.attributes, makeSurExists = true)) {
               case image: Image => complete(image)
               case SourceImageNotFound(_) => complete(StatusCodes.NotFound)
+              case UnexpectedFailure(_) =>
+                complete(HttpResponse(StatusCodes.InternalServerError))
             }
           }
         }

@@ -1,6 +1,7 @@
 package graphique.images
 
 import java.io.{IOException, ByteArrayOutputStream, ByteArrayInputStream}
+import javax.imageio.ImageIO
 
 import net.coobird.thumbnailator.Thumbnails
 
@@ -19,12 +20,16 @@ class ImageProcessor {
    */
   def process(image: Array[Byte], desiredAttributes: ImageAttributes): Either[ProcessingError, Array[Byte]] = {
 
-    val inputStream = new ByteArrayInputStream(image)
-    val thumbnailator = Thumbnails.of(inputStream)
+    val originalDimensions = Dimensions of image
+    val thumbnailator = Thumbnails of new ByteArrayInputStream(image)
 
     val sizedThumbnailator = desiredAttributes.size match {
       case ImageAttribute.OriginalSize => thumbnailator.scale(1.0)
-      case ImageAttribute.SizeWithin(dimensions) => thumbnailator.size(dimensions.width, dimensions.height)
+      case ImageAttribute.SizeWithin(dimensions) =>
+        if (dimensions fitsWithin originalDimensions)
+          thumbnailator.size(dimensions.width, dimensions.height)
+        else
+          thumbnailator.scale(1.0)
     }
 
     val formattedThumbnailator = desiredAttributes.format match {

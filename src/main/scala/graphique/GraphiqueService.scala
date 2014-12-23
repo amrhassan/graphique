@@ -36,7 +36,7 @@ class GraphiqueService(backend: Backend, threadPoolSize: Int) extends Actor {
       } onFailure {
         case e: Throwable  =>
           log error("Unexpected error", e)
-          originalSender ! ImageSubmissionFailure(e)
+          originalSender ! UnexpectedFailure(e)
       }
 
     case RequestImage(tag, attributes, makeSureExists) =>
@@ -64,7 +64,9 @@ class GraphiqueService(backend: Backend, threadPoolSize: Int) extends Actor {
           case SourceImageNotFoundError(_) => originalSender ! SourceImageNotFound(tag)
         }
       } onFailure {
-        case e: Throwable  => log error("Unexpected error", e)
+        case e: Throwable  => 
+          log error("Unexpected error", e)
+          originalSender ! UnexpectedFailure(e)
       }
   }
 }
@@ -85,7 +87,7 @@ object GraphiqueService {
 
   case object InvalidSubmittedImage
 
-  case class ImageSubmissionFailure(error: Throwable)
+  case class UnexpectedFailure(error: Throwable)
 
   /**
    * Request an HTTP URL for the image identified by the given tag and in the specified attributes.

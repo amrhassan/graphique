@@ -44,7 +44,7 @@ class BackendTest extends TestSpec {
     withBackend { backend =>
       val image = readResource("like_a_sir.jpg")
       val tag = backend submitImage image
-      backend createImage (tag, ImageAttributes.originalImage.resizedTo(Dimensions(100, 100)))
+      backend createImage (tag, ImageAttributes.originalImage.resizedToWithin(Dimensions(100, 100)))
     }
   }
 
@@ -71,7 +71,7 @@ class BackendTest extends TestSpec {
   it should "respond with an image within the requested image size" in {
     withBackend { backend =>
       val tag = backend submitImage readResource("like_a_sir.jpg")
-      val url = backend urlForExistingImage (tag, ImageAttributes.originalImage.resizedTo(Dimensions(100, 100)))
+      val url = backend urlForExistingImage (tag, ImageAttributes.originalImage.resizedToWithin(Dimensions(100, 100)))
       url should not be None
       val responseImage = ImageIO.read(Unirest.get(url).asBinary().getBody)
       responseImage.getHeight should be(100)

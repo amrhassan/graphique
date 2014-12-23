@@ -46,21 +46,21 @@ object Image {
    */
   def from(imageContent: ImageContent): Image = {
 
+    /**
+     * Returns an image tag for the given image.
+     *
+     * The image tag must be end with an appropriate file name extension for the image type.
+     */
+    def tagFor(imageContent: ImageContent): ImageTag = {
+      val extension = (Content detectFileNameExtension imageContent) getOrElse (throw new InvalidImageError)
+      val imageHash = DigestUtils md5Hex imageContent
+      s"$imageHash$extension"
+    }
+
     if (!imageValidator(imageContent))
       throw new InvalidImageError
     else {
       Image(tagFor(imageContent), ImageAttributes.originalImage)
     }
-  }
-
-  /**
-   * Returns an image tag for the given image.
-   *
-   * The image tag must be end with an appropriate file name extension for the image type.
-   */
-  private def tagFor(imageContent: ImageContent): ImageTag = {
-    val extension = (Content detectFileNameExtension imageContent) getOrElse (throw new InvalidImageError)
-    val imageHash = DigestUtils md5Hex imageContent
-    s"$imageHash$extension"
   }
 }

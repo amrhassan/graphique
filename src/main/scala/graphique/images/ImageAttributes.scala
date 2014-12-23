@@ -22,7 +22,7 @@ case class ImageAttributes(size: ImageAttribute.Size, format: ImageAttribute.For
    * This attribute usually results in a resize with respect to the aspect ratio
    * of the original image.
    */
-  def resizedTo(dimensions: Dimensions): ImageAttributes =
+  def resizedToWithin(dimensions: Dimensions): ImageAttributes =
     copy(size = ImageAttribute.SizeWithin(dimensions))
 
   /**
