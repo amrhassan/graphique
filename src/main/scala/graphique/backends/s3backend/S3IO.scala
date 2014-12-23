@@ -16,11 +16,6 @@ import scala.io.{Codec, Source}
  */
 private[s3backend] class S3IO(accessKey: String, secretKey: String, bucket: String) extends IO with LazyLogging {
 
-//  lazy val transferManager = this.synchronized {
-//    new TransferManager(new BasicAWSCredentials(accessKey, secretKey))
-//  }
-
-//  def s3Client: AmazonS3 = transferManager.getAmazonS3Client
   lazy val s3Client: AmazonS3 = this.synchronized {
     new AmazonS3Client(new BasicAWSCredentials(accessKey, secretKey))
   }
@@ -31,8 +26,6 @@ private[s3backend] class S3IO(accessKey: String, secretKey: String, bucket: Stri
     request.getRequestClientOptions.setReadLimit(data.length)
     request.setCannedAcl(CannedAccessControlList.PublicRead)
     s3Client.putObject(request)
-//    val uploading = transferManager upload request
-//    uploading waitForUploadResult()
   }
 
   private def metadataFor(data: Array[Byte]): ObjectMetadata = {
