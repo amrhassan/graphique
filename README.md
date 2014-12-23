@@ -12,6 +12,9 @@ It is built to handle:
 
 Graphique stores and hosts its own images over HTTP by default and it can use a different storage and file serving system like AWS S3, if configured to do so. It exposes its functionality through [RESTful APIs](https://github.com/amrhassan/graphique/wiki/API-Documentation).
 
+### Latest Release ###
+Download the latest release [from here](https://github.com/amrhassan/graphique/releases/latest).
+
 ### Installation ###
 The associated `Makefile` can install the application by executing the `install` target directly:
 ```
