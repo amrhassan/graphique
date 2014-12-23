@@ -24,3 +24,16 @@ Running
 Configuration
 =============
 Graphique uses the XDG BaseDirectory specification for looking up configuration files named `graphique/application.conf`. The configuration files are written in the [HOCON syntax](https://github.com/typesafehub/config/blob/master/HOCON.md). You can override any of the specified config parameters from the internal [configuration file](/src/main/resources/application.conf).
+
+### Backends ###
+Graphique builds its functionality on top primitive operations provided by one of its Backend implementations. 
+
+**The Local Backend**
+
+This backend enables Graphique to store its images on the local filesystem and it 
+spins up an internal http server to serve the requested images.
+
+**The AWS S3 Backend**
+
+This backend enables Graphique to store its images on an S3 bucket as public files and delegate the image serving
+to S3.
