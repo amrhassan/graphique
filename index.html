@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Graphique by amrhassan</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Graphique</h1>
+        <p>Image Management Microservice</p>
+        <p class="view"><a href="https://github.com/amrhassan/graphique">View the Project on GitHub <small>amrhassan/graphique</small></a></p>
+        <ul>
+          <li><a href="https://github.com/amrhassan/graphique/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/amrhassan/graphique/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/amrhassan/graphique">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p><a href="https://waffle.io/amrhassan/graphique"><img src="https://badge.waffle.io/amrhassan/graphique.png?label=ready&amp;title=Ready" alt="Stories in Ready"></a>
+<a href="https://travis-ci.org/amrhassan/graphique"><img src="https://travis-ci.org/amrhassan/graphique.svg" alt="Build Status"></a></p>
+
+<h1>
+<a id="graphique" class="anchor" href="#graphique" aria-hidden="true"><span class="octicon octicon-link"></span></a>Graphique</h1>
+
+<p>An image management <a href="http://microservices.io/patterns/microservices.html">microservice</a> written using the awesomeness of Scala, <a href="http://akka.io/">Akka</a>, <a href="http://spray.io/">Spray</a> and <a href="https://code.google.com/p/thumbnailator/">Thumbnailator</a>.</p>
+
+<p>It is built to handle:</p>
+
+<ul>
+<li>the low level book keeping of storing the actual image files</li>
+<li>the generation and caching of image thumbnails in arbitrary sizes and formats</li>
+<li>generating URLs for the managed images that are servable over HTTP</li>
+</ul>
+
+<p>It exposes its functionality through a RESTful APIs.</p>
+
+<h1>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h1>
+
+<ul>
+<li><code>sbt (=&gt; 0.13.7)</code></li>
+</ul>
+
+<h1>
+<a id="running" class="anchor" href="#running" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running</h1>
+
+<ol>
+<li>
+<code>cd</code> into the directory where the the project is</li>
+<li><code>sbt run</code></li>
+</ol>
+
+<h1>
+<a id="api-documentation" class="anchor" href="#api-documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>API Documentation</h1>
+
+<p>See <a href="https://github.com/amrhassan/graphique/wiki/API-Documentation">API Documentation</a>.</p>
+
+<h1>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h1>
+
+<p>Graphique uses the XDG BaseDirectory specification for looking up configuration files named <code>graphique/application.conf</code>. The configuration files are written in the <a href="https://github.com/typesafehub/config/blob/master/HOCON.md">HOCON syntax</a>. You can override any of the specified config parameters from the internal <a href="/src/main/resources/application.conf">configuration file</a>.</p>
+
+<h3>
+<a id="backends" class="anchor" href="#backends" aria-hidden="true"><span class="octicon octicon-link"></span></a>Backends</h3>
+
+<p>Graphique builds its functionality on top primitive operations provided by one of its Backend implementations. </p>
+
+<p><strong>The Local Backend</strong></p>
+
+<p>This backend enables Graphique to store its images on the local filesystem and it 
+spins up an internal http server to serve the requested images.</p>
+
+<p><strong>The AWS S3 Backend</strong></p>
+
+<p>This backend enables Graphique to store its images on an S3 bucket as public files and delegate the image serving
+to S3.</p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/amrhassan">amrhassan</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
