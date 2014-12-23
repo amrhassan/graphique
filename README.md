@@ -3,23 +3,26 @@
 
 # Graphique #
 
-An image management [microservice](http://microservices.io/patterns/microservices.html) written using the awesomeness of Scala, [Akka](http://akka.io/), [Spray](http://spray.io/) and [Thumbnailator](https://code.google.com/p/thumbnailator/).
+An image management [microservice](http://microservices.io/patterns/microservices.html) built using the awesomeness of Scala, [Akka](http://akka.io/), [Spray](http://spray.io/) and [Thumbnailator](https://code.google.com/p/thumbnailator/).
 
 It is built to handle:
 * the low level book keeping of storing the actual image files
 * the generation and caching of image variants in arbitrary sizes and formats
 * generating publicly-servable URLs for the managed images
 
-It exposes its functionality through [RESTful APIs](https://github.com/amrhassan/graphique/wiki/API-Documentation).
+Graphique stores and hosts its own images over HTTP by default and it can use a different storage and file serving system like AWS S3, if configured to do so. It exposes its functionality through [RESTful APIs](https://github.com/amrhassan/graphique/wiki/API-Documentation).
 
-Dependencies
-============
-* `sbt (=> 0.13.7)`
+### Installation ###
+The associated `Makefile` can install the application by executing the `install` target directly:
+```
+make install
+```
 
-Running
-=======
-1. `cd` into the directory where the the project is
-2. `sbt run`
+### Running From Source ###
+To run the service directly from its source code location, execute the following in the root of the source code tree:
+```
+sbt run
+```
 
 Configuration
 =============
