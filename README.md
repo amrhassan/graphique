@@ -7,10 +7,10 @@ An image management [microservice](http://microservices.io/patterns/microservice
 
 It is built to handle:
 * the low level book keeping of storing the actual image files
-* the generation and caching of image thumbnails in arbitrary sizes and formats
-* generating URLs for the managed images that are servable over HTTP
+* the generation and caching of image variants in arbitrary sizes and formats
+* generating publicly-servable URLs for the managed images
 
-It exposes its functionality through a RESTful APIs.
+It exposes its functionality through [RESTful APIs](https://github.com/amrhassan/graphique/wiki/API-Documentation).
 
 Dependencies
 ============
@@ -20,10 +20,6 @@ Running
 =======
 1. `cd` into the directory where the the project is
 2. `sbt run`
-
-API Documentation
-=================
-See [API Documentation](https://github.com/amrhassan/graphique/wiki/API-Documentation).
 
 Configuration
 =============
