@@ -35,7 +35,7 @@
 <h1>
 <a id="graphique" class="anchor" href="#graphique" aria-hidden="true"><span class="octicon octicon-link"></span></a>Graphique</h1>
 
-<p>An image management <a href="http://microservices.io/patterns/microservices.html">microservice</a> built using the awesomeness of Scala, <a href="http://akka.io/">Akka</a>, <a href="http://spray.io/">Spray</a> and <a href="https://code.google.com/p/thumbnailator/">Thumbnailator</a>.</p>
+<p>An image management <a href="http://microservices.io/patterns/microservices.html">microservice</a> built using the awesomeness of Scala, <a href="http://akka.io/">Akka</a> and <a href="http://spray.io/">Spray</a>.</p>
 
 <p>It is built to handle:</p>
 
@@ -46,6 +46,8 @@
 </ul>
 
 <p>Graphique stores and hosts its own images over HTTP by default and it can use a different storage and file serving system like AWS S3, if configured to do so. It exposes its functionality through <a href="https://github.com/amrhassan/graphique/wiki/API-Documentation">RESTful APIs</a>.</p>
+
+<p>The actual image processing and heavy lifting is done by the awesome <a href="https://code.google.com/p/thumbnailator/">Thumbnailator</a>.</p>
 
 <h3>
 <a id="latest-release" class="anchor" href="#latest-release" aria-hidden="true"><span class="octicon octicon-link"></span></a>Latest Release</h3>
