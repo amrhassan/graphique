@@ -25,12 +25,37 @@ make install
 
 ### Running From Source ###
 To run the service directly from its source code location, execute the following in the root of the source code tree:
-```
+```bash
 sbt run
 ```
 
 ### Example Usage ###
-*TODO*
+
+**Submitting an image**
+```bash
+[amr@marvin ~]$ http POST http://localhost:8980/images < an_image.jpg 
+
+HTTP/1.1 201 Created
+Content-Length: 0
+Date: Wed, 24 Dec 2014 14:12:26 GMT
+Location: /image/137a07962e49a58b6161ace95bb1b07d.jpg
+Server: spray-can/1.3.2
+```
+
+**Creating a variant**
+```bash
+[amr@marvin ~]$ http PATCH http://localhost:8980/image/137a07962e49a58b6161ace95bb1b07d.jpg?size-within=120x120
+
+HTTP/1.1 200 OK
+Content-Length: 106
+Content-Type: application/json; charset=UTF-8
+Date: Wed, 24 Dec 2014 14:13:47 GMT
+Server: spray-can/1.3.2
+
+{
+    "url": "http://localhost:9806/137a07962e49a58b6161ace95bb1b07d-295696c3647869abf69783925c9616d7.jpg"
+}
+```
 
 ### Client Implementations ###
 * For the JVM: [graphique-client-java](https://github.com/amrhassan/graphique-client-java)
