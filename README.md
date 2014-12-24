@@ -42,7 +42,7 @@ Location: /image/137a07962e49a58b6161ace95bb1b07d.jpg
 Server: spray-can/1.3.2
 ```
 
-**Creating a variant**
+**Creating an image variant**
 ```bash
 [amr@marvin ~]$ http PATCH http://localhost:8980/image/137a07962e49a58b6161ace95bb1b07d.jpg?size-within=120x120
 
