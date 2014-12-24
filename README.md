@@ -29,6 +29,13 @@ To run the service directly from its source code location, execute the following
 sbt run
 ```
 
+### Example Usage ###
+*TODO*
+
+### Client Implementations ###
+* For the JVM: [graphique-client-java](https://github.com/amrhassan/graphique-client-java)
+* For Python: [graphique-client-python](https://github.com/amrhassan/graphique-client-python)
+
 Configuration
 =============
 Graphique uses the XDG BaseDirectory specification for looking up configuration files named `graphique/application.conf`. The configuration files are written in the [HOCON syntax](https://github.com/typesafehub/config/blob/master/HOCON.md). You can override any of the specified config parameters from the internal [configuration file](/src/main/resources/application.conf).
