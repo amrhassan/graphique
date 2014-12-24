@@ -31,7 +31,9 @@ class GraphiqueService(backend: Backend, threadPoolSize: Int) extends Actor {
           log info s"Submitted $tag successfully"
           originalSender ! ImageSubmissionOK(tag)
         } catch {
-          case e: InvalidImageError => originalSender ! InvalidSubmittedImage
+          case e: InvalidImageError =>
+            log info "That's no image!"
+            originalSender ! InvalidSubmittedImage
         }
       } onFailure {
         case e: Throwable  =>
