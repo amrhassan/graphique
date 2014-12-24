@@ -67,8 +67,44 @@
 
 <p>To run the service directly from its source code location, execute the following in the root of the source code tree:</p>
 
-<pre><code>sbt run
-</code></pre>
+<div class="highlight highlight-bash"><pre>sbt run</pre></div>
+
+<h3>
+<a id="example-usage" class="anchor" href="#example-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example Usage</h3>
+
+<p><strong>Submitting an image</strong></p>
+
+<div class="highlight highlight-bash"><pre>[amr@marvin <span class="pl-k">~</span>]$ http POST http://localhost:8980/images <span class="pl-k">&lt;</span> an_image.jpg 
+
+HTTP/1.1 201 Created
+Content-Length: 0
+Date: Wed, 24 Dec 2014 14:12:26 GMT
+Location: /image/137a07962e49a58b6161ace95bb1b07d.jpg
+Server: spray-can/1.3.2</pre></div>
+
+<p><strong>Creating an image variant</strong></p>
+
+<div class="highlight highlight-bash"><pre>[amr@marvin <span class="pl-k">~</span>]$ http PATCH http://localhost:8980/image/137a07962e49a58b6161ace95bb1b07d.jpg<span class="pl-k">?</span>size-within=120x120
+
+HTTP/1.1 200 OK
+Content-Length: 106
+Content-Type: application/json<span class="pl-k">;</span> charset=UTF-8
+Date: Wed, 24 Dec 2014 14:13:47 GMT
+Server: spray-can/1.3.2
+
+{
+    <span class="pl-s1"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>http://localhost:9806/137a07962e49a58b6161ace95bb1b07d-295696c3647869abf69783925c9616d7.jpg<span class="pl-pds">"</span></span>
+}</pre></div>
+
+<h3>
+<a id="client-implementations" class="anchor" href="#client-implementations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Client Implementations</h3>
+
+<ul>
+<li>For the JVM: <a href="https://github.com/amrhassan/graphique-client-java">graphique-client-java</a>
+</li>
+<li>For Python: <a href="https://github.com/amrhassan/graphique-client-python">graphique-client-python</a>
+</li>
+</ul>
 
 <h1>
 <a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h1>
