@@ -16,10 +16,6 @@ case class JPEGFormat(quality: Double = 0.95) extends ImageFormat {
   val fileNameExtension = ".jpg"
 }
 
-/**
- * The PNG image format.
- */
 case object PNGFormat extends ImageFormat { val fileNameExtension = ".png" }
-
 case object GIFFormat extends ImageFormat { val fileNameExtension = ".gif" }
 case object BMPFormat extends ImageFormat { val fileNameExtension = ".bmp" }

@@ -37,6 +37,8 @@ class ImageProcessor {
       case ImageAttribute.TranscodedFormat(format) => format match {
         case PNGFormat => thumbnailator.outputFormat("PNG")
         case JPEGFormat(quality) => thumbnailator.outputFormat("JPEG").outputQuality(quality)
+        case BMPFormat => thumbnailator.outputFormat("BMP")
+        case GIFFormat => thumbnailator.outputFormat("GIF")
       }
     }
 

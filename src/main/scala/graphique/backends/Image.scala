@@ -71,6 +71,8 @@ case class Image(tag: String, attributes: images.ImageAttributes) {
         imageFormat match {
           case PNGFormat => "PNG"
           case JPEGFormat(quality) => s"JPEG($quality)"
+          case BMPFormat => "BMP"
+          case GIFFormat => "GIF"
         }
     }
 
