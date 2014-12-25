@@ -40,6 +40,6 @@ object Content {
       case "image/jpeg" => ".jpg"
       case "image/jpg" => ".jpg"
       case "image/png" => ".png"
-      case _ => throw new IllegalStateException("Image type unaccounted for!")
+      case mimeType => throw new IllegalStateException(s"Image type unaccounted for!: $mimeType")
     }
 }
