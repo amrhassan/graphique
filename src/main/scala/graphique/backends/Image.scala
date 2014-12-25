@@ -98,9 +98,9 @@ object Image {
      * The image tag must be end with an appropriate file name extension for the image type.
      */
     def tagFor(imageContent: ImageContent): ImageTag = {
-      val extension = (Content detectFileNameExtension imageContent) getOrElse (throw new InvalidImageError)
+      val imageFormat = (Content detectImageFormat imageContent) getOrElse (throw new InvalidImageError)
       val imageHash = DigestUtils md5Hex imageContent
-      s"$imageHash$extension"
+      s"$imageHash${imageFormat.fileNameExtension}"
     }
 
     if (!imageValidator(imageContent))

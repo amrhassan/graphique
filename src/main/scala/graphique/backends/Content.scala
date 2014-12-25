@@ -1,6 +1,6 @@
 package graphique.backends
 
-import graphique.images.{PNGFormat, JPEGFormat, ImageFormat}
+import graphique.images._
 import net.sf.jmimemagic.{MagicException, MagicMatchNotFoundException, MagicParseException, Magic}
 
 /**
@@ -31,15 +31,9 @@ object Content {
       case "image/jpeg" => Some(JPEGFormat())
       case "image/jpg" => Some(JPEGFormat())
       case "image/png" => Some(PNGFormat)
+      case "image/gif" => Some(GIFFormat)
+      case "image/bmp" => Some(BMPFormat)
       case _ => None
     }
   }
-
-  def detectFileNameExtension(data: Array[Byte]): Option[String] =
-    detectMimeType(data) map {
-      case "image/jpeg" => ".jpg"
-      case "image/jpg" => ".jpg"
-      case "image/png" => ".png"
-      case mimeType => throw new IllegalStateException(s"Image type unaccounted for!: $mimeType")
-    }
 }
