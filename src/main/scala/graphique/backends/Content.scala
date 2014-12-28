@@ -28,8 +28,8 @@ object Content {
    */
   def detectImageFormat(data: ImageContent): Option[ImageFormat] = {
     detectMimeType(data) flatMap {
-      case "image/jpeg" => Some(JPEGFormat())
-      case "image/jpg" => Some(JPEGFormat())
+      case "image/jpeg" => Some(JPEGFormat(1.0))
+      case "image/jpg" => Some(JPEGFormat(1.0))
       case "image/png" => Some(PNGFormat)
       case "image/gif" => Some(GIFFormat)
       case "image/bmp" => Some(BMPFormat)

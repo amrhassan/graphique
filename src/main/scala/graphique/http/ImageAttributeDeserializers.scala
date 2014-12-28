@@ -23,12 +23,11 @@ object ImageAttributeDeserializers {
     val JPEGPattern = """JPEG\(([0-9.]+)\)""".r
     def apply(optionString: Option[String]) = optionString map (_.toUpperCase) map {
       case "PNG" => Right(Some(PNGFormat))
-      case "JPEG" => Right(Some(JPEGFormat()))
       case JPEGPattern(quality) if quality.toFloat <= 1 => Right(Some(JPEGFormat(quality.toFloat)))
       case "GIF" => Right(Some(GIFFormat))
       case "BMP" => Right(Some(BMPFormat))
       case _ => Left(
-        new MalformedContent("The image format must be one of [JPEG, JPEG(quality), PNG, GIF, BMP] " +
+        new MalformedContent("The image format must be one of [JPEG(quality), PNG, GIF, BMP] " +
           "where (0 <= quality <= 1)"))
     } getOrElse Right(None)
   }

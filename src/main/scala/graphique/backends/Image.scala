@@ -70,7 +70,7 @@ case class Image(tag: String, attributes: images.ImageAttributes) {
       case ImageAttribute.TranscodedFormat(imageFormat) =>
         imageFormat match {
           case PNGFormat => "PNG"
-          case JPEGFormat(quality) => s"JPEG($quality)"
+          case JPEGFormat(quality) => f"JPEG($quality%.2f)"
           case BMPFormat => "BMP"
           case GIFFormat => "GIF"
         }

@@ -51,7 +51,7 @@ class BackendTest extends TestSpec {
   it should "respond with a JPEG image URL when requested" in {
     withBackend { backend =>
       val tag = backend submitImage readResource("ayam_soda.png")
-      val url = backend urlForExistingImage (tag, ImageAttributes.originalImage.transcodedTo(JPEGFormat()))
+      val url = backend urlForExistingImage (tag, ImageAttributes.originalImage.transcodedTo(JPEGFormat(1.0)))
       url should not be None
       val response = gulp(Unirest.get(url).asBinary().getBody)
       (Content detectMimeType response.toArray) should be(Some("image/jpeg"))
