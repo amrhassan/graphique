@@ -18,6 +18,11 @@ case class Image(tag: String, attributes: images.ImageAttributes) {
     case FileNameExtensionPattern(extension) => extension
   }
 
+  private lazy val targetFileNameExtension = attributes.format match {
+    case ImageAttribute.OriginalFormat => fileNameExtension
+    case ImageAttribute.TranscodedFormat(imageFormat) => imageFormat.fileNameExtension
+  }
+
   private lazy val extensionlessTag: String =
     tag substring (0, tag lastIndexOf '.')
 
@@ -25,7 +30,7 @@ case class Image(tag: String, attributes: images.ImageAttributes) {
     if (attributes.isUnmodified)
       tag
     else
-      s"$extensionlessTag-$hashedAttributes$fileNameExtension"
+      s"$extensionlessTag-$hashedAttributes$targetFileNameExtension"
 
   lazy val sourceId: ImageId = tag
 
