@@ -1,7 +1,7 @@
 
 name := "graphique"
 
-version := "1.6-SNAPSHOT"
+version := "1.7-SNAPSHOT"
 
 organization := "graphique"
 
