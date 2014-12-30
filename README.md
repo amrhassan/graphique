@@ -17,7 +17,7 @@ The actual image processing heavy lifting is done by the awesome [Thumbnailator]
 ### Dependencies ###
 * `jdk 8`
 * `sbt 0.13`
-* 
+
 ### Spinning it Up ###
 
 1. Download the latest release [from here](https://github.com/amrhassan/graphique/releases/latest).
