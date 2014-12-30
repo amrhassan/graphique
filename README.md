@@ -14,24 +14,16 @@ Graphique stores and hosts its own images over HTTP by default and it can use a 
 
 The actual image processing heavy lifting is done by the awesome [Thumbnailator](https://code.google.com/p/thumbnailator/).
 
-### Latest Release ###
-Download the latest release [from here](https://github.com/amrhassan/graphique/releases/latest).
-
 ### Dependencies ###
 * `jdk 8`
 * `sbt 0.13`
+* 
+### Spinning it Up ###
 
-### Installation ###
-The associated `Makefile` can install the application by executing the `install` target directly:
-```
-make install
-```
-
-### Running From Source ###
-To run the service directly from its source code location, execute the following in the root of the source code tree:
-```bash
-sbt run
-```
+1. Download the latest release [from here](https://github.com/amrhassan/graphique/releases/latest).
+2. Execute the `*.jar` by doing `java -jar *.jar`
+3. .. or execute from extracted source by doing `sbt run`
+4. .. or install by doing `make install` as a privileged user
 
 ### Example Usage ###
 
